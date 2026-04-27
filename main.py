@@ -1,92 +1,114 @@
 import streamlit as st
 import pandas as pd
 
-# 1. CONFIGURACIÓN
-st.set_page_config(page_title="CETEP - Administración Central", layout="wide", page_icon="🎓")
+# 1. CONFIGURACIÓN DE PÁGINA
+st.set_page_config(page_title="CETEP - Plataforma Integral", layout="wide", page_icon="🎓")
 
-# Estilo para que se vea serio y profesional
+# Estilo profesional
 st.markdown("""
     <style>
-    .titulo-ipea { color: #002d5a; text-align: center; font-weight: bold; }
+    .titulo-principal { color: #002d5a; text-align: center; font-weight: bold; }
     .stTabs [aria-selected="true"] { background-color: #004a99; color: white; }
-    .metric-box { background-color: #f0f2f6; padding: 15px; border-radius: 10px; border: 1px solid #d1d1d1; }
+    .seccion-info { background-color: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 5px solid #004a99; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MENÚ LATERAL
+# 2. BASE DE DATOS EN SESIÓN (Para persistencia de datos)
+if 'lista_alumnos' not in st.session_state:
+    st.session_state['lista_alumnos'] = [
+        {"Nombre": "Juan Pérez", "Cédula": "1-1111-1111", "Tel": "8630-0000", "Curso": "Asistente Legal"},
+        {"Nombre": "Ana Mora", "Cédula": "2-2222-2222", "Tel": "7000-0000", "Curso": "Inglés"}
+    ]
+
+# 3. MENÚ LATERAL
 with st.sidebar:
     st.title("🛡️ CETEP")
-    opcion = st.radio("Menú Principal", ["Inicio", "Técnicos", "Matrícula", "Información", "Campus Virtual"])
+    opcion = st.radio("Menú Principal", ["Inicio", "Técnicos", "Inglés", "Prep. Colegio Abogados", "Matrícula", "Información", "Campus Virtual"])
     st.markdown("---")
     st.markdown(f"[![WhatsApp](https://img.shields.io/badge/WhatsApp-Contactar-green?style=for-the-badge&logo=whatsapp)](https://wa.me/50686302333)")
 
-# --- DATOS DEL SISTEMA ---
-if 'db_alumnos' not in st.session_state:
-    st.session_state['db_alumnos'] = [
-        {"Nombre": "Juan Pérez", "Cédula": "1-1111-1111", "Tel": "8888-0000", "Curso": "Asistente Legal"},
-        {"Nombre": "Ana Mora", "Cédula": "2-2222-2222", "Tel": "7777-0000", "Curso": "Gestión Bancaria"}
-    ]
-
-# --- 3. LÓGICA DE SECCIONES ---
-
+# --- 4. SECCIÓN: INICIO ---
 if opcion == "Inicio":
-    st.markdown("<h1 class='titulo-ipea'>CETEP: Sistema de Gestión Académica</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='titulo-principal'>CETEP: Formación Técnica Superior</h1>", unsafe_allow_html=True)
     st.image("https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
+    st.write("### Excelencia Académica en Heredia")
+    st.write("Líderes en capacitación técnica y profesional con enfoque en resultados laborales.")
 
+# --- 5. SECCIÓN: TÉCNICOS ---
+elif opcion == "Técnicos":
+    st.header("Nuestros Programas Técnicos")
+    t1, t2, t3, t4 = st.tabs(["⚖️ Asistente Legal", "🏦 Gestión Bancaria", "📊 Contabilidad", "⚙️ Procesos Industriales"])
+    
+    with t1:
+        st.subheader("Técnico Superior en Asistente Legal")
+        st.write("Módulos: Cobro Judicial, Prescripción, Derecho Notarial y Procesal.")
+    with t2:
+        st.subheader("Técnico en Gestión Bancaria Bilingüe")
+        st.write("Módulos: Normativa SUGEF, Ley Bancaria y Operaciones de Caja.")
+    with t3:
+        st.subheader("Técnico en Contabilidad Técnica")
+        st.write("Módulos: Ciclo Contable, Impuestos (ATV) y Planillas CCSS/INS.")
+    with t4:
+        st.subheader("Especialista en Procesos Industriales")
+        st.write("Módulos: Calidad, Logística, Seguridad y Lean Manufacturing.")
+
+# --- 6. SECCIÓN: INGLÉS (RESTAURADA) ---
+elif opcion == "Inglés":
+    st.header("Programa de Inglés")
+    st.image("https://images.unsplash.com/photo-1543165796-5426273eaab3?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
+    st.subheader("Inglés Técnico y Conversacional")
+    st.write("Enfoque práctico para el mundo de los negocios y servicios.")
+    st.info("Niveles: Básico, Intermedio y Avanzado.")
+
+# --- 7. SECCIÓN: PREPARACIÓN COLEGIO ABOGADOS (NUEVA) ---
+elif opcion == "Prep. Colegio Abogados":
+    st.header("Curso de Preparación para el Colegio de Abogados")
+    st.write("Programa intensivo diseñado para el éxito en el Examen de Excelencia Académica.")
+    st.markdown("""
+    **Contenidos Principales:**
+    * Derecho Civil y Mercantil.
+    * Derecho Penal y Constitucional.
+    * Ética Profesional y Ley Orgánica.
+    * Simulacros de examen basados en jurisprudencia reciente de Costa Rica.
+    """)
+    st.warning("📅 Consulte por las próximas fechas de inicio para el bloque 2026.")
+
+# --- 8. SECCIÓN: MATRÍCULA ---
 elif opcion == "Matrícula":
-    st.header("📝 Registro de Estudiantes")
-    with st.form("form_registro"):
+    st.header("📝 Formulario de Matrícula")
+    with st.form("form_mat"):
         col1, col2 = st.columns(2)
         with col1:
-            n = st.text_input("Nombre Completo:")
-            c = st.text_input("Cédula:")
+            nom = st.text_input("Nombre Completo:")
+            ced = st.text_input("Cédula:")
         with col2:
-            t = st.text_input("Teléfono:")
-            cur = st.selectbox("Programa:", ["Asistente Legal", "Bancario", "Contabilidad", "Industrial", "Inglés"])
-        d = st.text_area("Dirección Exacta:")
-        if st.form_submit_button("Registrar en Sistema"):
-            st.session_state['db_alumnos'].append({"Nombre": n, "Cédula": c, "Tel": t, "Curso": cur})
-            st.success("Alumno guardado correctamente.")
+            tel = st.text_input("Teléfono:")
+            cur = st.selectbox("Programa:", ["Asistente Legal", "Bancario", "Contabilidad", "Industrial", "Inglés", "Prep. Colegio Abogados"])
+        dir = st.text_area("Dirección:")
+        if st.form_submit_button("Formalizar Matrícula"):
+            if nom and ced and tel:
+                st.session_state['lista_alumnos'].append({"Nombre": nom, "Cédula": ced, "Tel": tel, "Curso": cur})
+                st.success(f"✅ ¡Registro completo para {nom}!")
+            else:
+                st.error("Campos obligatorios faltantes.")
 
+# --- 9. SECCIÓN: INFORMACIÓN ---
+elif opcion == "Información":
+    st.header("Sobre el CETEP")
+    st.markdown("<div class='seccion-info'><h3>Convenios y Ubicación</h3><p>Sede Heredia. Alianzas estratégicas con el sector legal e industrial.</p></div>", unsafe_allow_html=True)
+
+# --- 10. SECCIÓN: CAMPUS VIRTUAL (DIRECTOR Y ESTUDIANTE) ---
 elif opcion == "Campus Virtual":
-    st.markdown("<h2 style='text-align: center;'>🔐 Control de Acceso</h2>", unsafe_allow_html=True)
-    perfil = st.selectbox("Ingresar como:", ["Director", "Estudiante", "Profesor"])
+    st.header("🔐 Acceso Privado")
+    perfil = st.selectbox("Perfil:", ["Director", "Estudiante"])
     
-    # --- PANEL DEL DIRECTOR (TU PANEL) ---
     if perfil == "Director":
-        clave = st.text_input("Contraseña Maestro:", type="password")
-        if clave == "admin_cetep":
-            st.success("👨‍⚖️ Bienvenido, Director Luis Varela")
-            
-            t_adm1, t_adm2, t_adm3 = st.tabs(["📊 Dashboard Financiero", "👥 Lista de Alumnos", "🎥 Gestión de Videos"])
-            
-            with t_adm1:
-                col_m1, col_m2 = st.columns(2)
-                with col_m1:
-                    st.metric("Ingresos Totales", "₡1,250,000", "+12%")
-                with col_m2:
-                    st.metric("Matrículas Activas", len(st.session_state['db_alumnos']))
-                
-            with t_adm2:
-                st.subheader("Base de Datos de Estudiantes")
-                df = pd.DataFrame(st.session_state['db_alumnos'])
-                st.dataframe(df, use_container_width=True)
-                
-            with t_adm3:
-                st.subheader("Subir Enlaces de Clases")
-                st.text_input("Título de la clase:")
-                st.text_input("Link de Google Meet / YouTube:")
-                st.button("Publicar en Videoteca")
-        elif clave != "":
-            st.error("Contraseña incorrecta.")
+        if st.text_input("Clave Maestro:", type="password") == "admin_cetep":
+            st.success("Panel Luis Varela")
+            st.metric("Total Alumnos", len(st.session_state['lista_alumnos']))
+            st.dataframe(pd.DataFrame(st.session_state['lista_alumnos']))
 
-    # --- PANEL DEL ESTUDIANTE ---
     elif perfil == "Estudiante":
-        ced = st.text_input("Cédula:")
-        if st.button("Entrar a mis cursos"):
-            st.info("Aquí el estudiante verá sus notas y temario.")
-
-    # --- PANEL DEL PROFESOR ---
-    elif perfil == "Profesor":
-        if st.text_input("Clave Profe:", type="password") == "profe_cetep":
-            st.write("Panel para subir notas.")
+        ced_log = st.text_input("Cédula:")
+        if st.button("Ver Mi Progreso"):
+            st.info("Cargando notas y temarios específicos...")
