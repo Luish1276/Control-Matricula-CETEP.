@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-# 1. CONFIGURACIÓN DE PÁGINA (ESTILO ELITE)
+# 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 st.markdown("""
@@ -10,7 +10,7 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
     * { font-family: 'Poppins', sans-serif; }
 
-    /* Hero Section - Impacto Visual */
+    /* Hero Section */
     .hero-full {
         background: linear-gradient(rgba(0,30,60,0.7), rgba(0,30,60,0.9)), 
                     url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920');
@@ -26,7 +26,7 @@ st.markdown("""
     
     .hero-title { font-size: 55px; font-weight: 800; line-height: 1.1; margin-bottom: 10px; letter-spacing: -2px; }
 
-    /* Estilo de Malla Curricular (La Carnita) */
+    /* Estilo de Malla Curricular */
     .bloque-header {
         background: #002d5a;
         color: #ffcc00;
@@ -66,7 +66,8 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS DETALLADA (TEMARIOS POR BLOQUES)
+# 2. BASE DE DATOS UNIFICADA (Todos los técnicos a 5 rojos semanales)
+# Excepto Preparación Colegio de Abogados
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses",
@@ -74,12 +75,12 @@ OFFER_ACADEMICA = {
         "Malla": {
             "MES 1-2: Fundamentación Financiera": ["Sistemas Bancarios de Costa Rica", "Legislación Financiera Básica", "Ética Profesional y Servicio al Cliente"],
             "MES 3-4: Operativa de Caja": ["Reconocimiento de Billetaje (Dólares/Colones)", "Detección de Falsificaciones", "Prevención de Legitimación de Capitales"],
-            "MES 5-6: Especialización Técnica": ["Software de Gestión Bancaria", "Arqueos y Cuadres de Caja", "Técnicas de Venta Cruzada y Empleabilidad"]
+            "MES 5-6: Especialización Técnica": ["Software de Gestión Bancaria", "Arqueos y Cuadres de Caja", "Técnicas de Empleabilidad Bancaria"]
         }
     },
     "Gestión de Operaciones e Industria Médica": {
         "D": "9 Meses",
-        "Inversion": "Consultar Plan de Pagos",
+        "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
             "CUATRIMESTRE I": ["Introducción a la Industria Médica", "GDP (Buenas Prácticas de Documentación)", "Metrología e Instrumentación Vernier"],
             "CUATRIMESTRE II": ["Normativa ISO 13485:2016", "Protocolos de Cuarto Limpio", "Lean Manufacturing y 5S"],
@@ -88,26 +89,38 @@ OFFER_ACADEMICA = {
     },
     "Técnico Asistente Legal": {
         "D": "9 Meses",
+        "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
             "CUATRIMESTRE I": ["Investigación Jurídica y LexisNexis", "Redacción Documental y Ortografía", "IA para Productividad Legal"],
             "CUATRIMESTRE II": ["Derecho Civil y Notarial", "Legislación Migratoria", "Procesos Administrativos"],
             "CUATRIMESTRE III": ["Derecho Laboral y Cargas Sociales", "Derecho de Familia", "Técnicas de Litigio y Apoyo Procesal"]
         }
     },
-    "Preparación Examen Excelencia Académica (Abogados)": {
-        "D": "Curso Intensivo",
-        "Malla": {
-            "BLOQUE JURÍDICO": ["Contratos Civiles y Mercantiles", "Responsabilidad Civil", "Sucesiones y Derechos Reales"],
-            "BLOQUE PÚBLICO": ["Derecho Constitucional", "Derecho Administrativo", "Recursos de Amparo y Hábeas Corpus"],
-            "BLOQUE ÉTICO": ["Deontología Jurídica", "Código de Deberes", "Jurisprudencia Reciente de la Sala Segunda"]
-        }
-    },
     "Asistente Contable y Gestión Administrativa": {
         "D": "9 Meses",
+        "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
             "BLOQUE I": ["Contabilidad General I", "Cuentas por Cobrar y Pagar", "Conciliación Bancaria"],
             "BLOQUE II": ["Excel Financiero y Tablas Dinámicas", "Legislación Tributaria (IVA)", "Contabilidad de Costos"],
             "BLOQUE III": ["Planillas (TICA/CCSS/INS)", "Impuesto sobre la Renta", "Software Contable"]
+        }
+    },
+    "Inglés Global Conversacional": {
+        "D": "12 Meses",
+        "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
+        "Malla": {
+            "Básico": ["Fonética y Estructura", "Vocabulario Cotidiano", "Comprensión Auditiva"],
+            "Intermedio": ["Business English", "Redacción de Correos", "Fluidez en Conversación"],
+            "Avanzado": ["Presentaciones Ejecutivas", "Inglés Técnico por Área", "Preparación para Certificación"]
+        }
+    },
+    "Preparación Examen Excelencia Académica (Abogados)": {
+        "D": "Curso Intensivo",
+        "Inversion": "Inversión cerrada - Consultar fechas de inicio",
+        "Malla": {
+            "BLOQUE JURÍDICO": ["Contratos Civiles y Mercantiles", "Responsabilidad Civil", "Sucesiones y Derechos Reales"],
+            "BLOQUE PÚBLICO": ["Derecho Constitucional", "Derecho Administrativo", "Recursos de Amparo y Hábeas Corpus"],
+            "BLOQUE ÉTICO": ["Deontología Jurídica", "Código de Deberes", "Jurisprudencia Reciente de la Sala Segunda"]
         }
     }
 }
@@ -132,26 +145,26 @@ if nav == "Inicio":
         </div>
         """, unsafe_allow_html=True)
     
-    st.markdown("<h2 style='text-align:center; margin: 40px 0;'>¿Por qué estudiar con nosotros?</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align:center; margin: 40px 0;'>Educación Accesible y de Calidad</h2>", unsafe_allow_html=True)
     
     c1, c2, c3 = st.columns(3)
     with c1:
-        st.success("💰 **A tu alcance:** Pagos semanales desde ₡5,000.")
+        st.success("💰 **Mensualidad Única:** ₡5,000 semanales en todos nuestros técnicos.")
     with c2:
-        st.info("🕒 **Flexibilidad:** 3 horarios (Mañana, Tarde 2-4, Noche).")
+        st.info("🕒 **Horarios Flexibles:** Mañana, Tarde (2-4 pm) y Noche.")
     with c3:
-        st.warning("🚀 **Empleabilidad:** Enfoque directo en el sector real.")
+        st.warning("🚀 **Matrícula:** Solo ₡10,000 para iniciar tu carrera.")
 
 elif nav == "Oferta Académica":
-    st.header("Detalle de Programas Académicos")
-    sel = st.selectbox("Elija el programa para ver el temario completo:", list(OFFER_ACADEMICA.keys()))
+    st.header("Programas Académicos 2026")
+    sel = st.selectbox("Seleccione un programa para ver el temario:", list(OFFER_ACADEMICA.keys()))
     info = OFFER_ACADEMICA[sel]
     
     st.markdown(f"### ⏱️ Duración: {info['D']}")
-    if 'Inversion' in info: st.write(f"💵 **Inversión:** {info['Inversion']}")
+    st.write(f"💵 **Inversión:** {info['Inversion']}")
     
     st.write("---")
-    st.write("### Estructura Curricular:")
+    st.write("### Estructura Curricular Detallada:")
     for bloque, temas in info['Malla'].items():
         st.markdown(f"<div class='bloque-header'>{bloque}</div>", unsafe_allow_html=True)
         st.markdown("<div class='temario-box'>", unsafe_allow_html=True)
@@ -169,12 +182,12 @@ elif nav == "Matrícula en Línea":
         hor = st.selectbox("Horario de Preferencia", ["Mañana (9-11 am)", "Tarde (2-4 pm)", "Noche (6-8 pm)"])
         if st.form_submit_button("SOLICITAR INGRESO"):
             st.balloons()
-            st.success(f"¡Excelente {n}! Hemos recibido tu solicitud para {prog}. Te contactaremos al WhatsApp.")
+            st.success(f"¡Excelente {n}! Hemos recibido tu solicitud para {prog}. Te contactaremos pronto.")
 
 elif nav == "Campus Virtual":
-    st.header("Acceso a Estudiantes")
+    st.header("Acceso Estudiantes")
     st.text_input("Usuario (Cédula)")
     st.text_input("Contraseña", type="password")
-    st.button("Entrar al Aula")
+    st.button("Entrar")
 
 st.markdown("<div class='footer'>© 2026 CETEP | Centro de Estudios Técnicos Profesionales | Sede San José - Heredia</div>", unsafe_allow_html=True)
