@@ -9,11 +9,12 @@ st.markdown("""
     <style>
     .titulo-ipea { color: #002d5a; text-align: center; font-weight: bold; font-family: 'Arial'; }
     .stTabs [aria-selected="true"] { background-color: #004a99; color: white; }
-    .nota-card { background-color: #f8f9fa; padding: 15px; border-left: 5px solid #004a99; border-radius: 5px; margin-bottom: 10px; }
+    .card-academica { background-color: #ffffff; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; }
+    .nota-aprobada { color: #28a745; font-weight: bold; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. MENÚ DE NAVEGACIÓN
+# 2. NAVEGACIÓN
 with st.sidebar:
     st.title("🛡️ CETEP")
     opcion = st.radio("Menú Principal", ["Inicio", "Técnicos", "Inglés", "Matrícula", "Información", "Campus Virtual"])
@@ -21,79 +22,83 @@ with st.sidebar:
     st.subheader("📱 Soporte")
     st.markdown(f"[![WhatsApp](https://img.shields.io/badge/WhatsApp-Contactar-green?style=for-the-badge&logo=whatsapp)](https://wa.me/50686302333)")
 
-# Base de datos simulada para la consulta de estudiantes
-notas_ejemplo = {
-    "1-1111-1111": {"Nombre": "Juan Pérez", "Carrera": "Asistente Legal", "Notas": {"Cobro Judicial": 90, "Derecho Notarial": 85}},
-    "2-2222-2222": {"Nombre": "Ana Mora", "Carrera": "Gestión Bancaria", "Notas": {"Legislación": 88, "Caja": 95}}
+# --- BASE DE DATOS ACADÉMICA (Simulada) ---
+base_datos = {
+    "1-1111-1111": {
+        "Nombre": "Juan Pérez",
+        "Carrera": "Técnico en Asistente Legal",
+        "Cursos_Inscritos": ["Derecho Civil I", "Cobro Judicial", "Derecho Notarial"],
+        "Temario": [
+            "Módulo 1: Introducción al Ordenamiento Jurídico CR",
+            "Módulo 2: Gestión de Cobro y Plazos de Prescripción",
+            "Módulo 3: Actos Notariales y Protocolo",
+            "Módulo 4: Plataformas Digitales del Poder Judicial"
+        ],
+        "Notas": [
+            {"Materia": "Derecho Civil I", "Nota": 92, "Estado": "Aprobado"},
+            {"Materia": "Cobro Judicial", "Nota": 88, "Estado": "Aprobado"},
+            {"Materia": "Derecho Notarial", "Nota": 0, "Estado": "En Curso"}
+        ]
+    }
 }
 
 # --- 3. LÓGICA DE SECCIONES ---
 
 if opcion == "Inicio":
-    st.markdown("<h1 class='titulo-ipea'>Centro de Estudios Técnicos y Especialidades Profesionales</h1>", unsafe_allow_html=True)
+    st.markdown("<h1 class='titulo-ipea'>CETEP: Formación Técnica Superior</h1>", unsafe_allow_html=True)
     st.image("https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
 
-elif opcion == "Técnicos":
-    st.header("Programas Técnicos")
-    st.write("Especializaciones de alta demanda laboral en Costa Rica.")
-
 elif opcion == "Matrícula":
-    st.header("📝 Formulario de Matrícula Oficial")
-    st.write("Por favor, complete todos los campos para formalizar su inscripción.")
-    
-    with st.form("registro_completo"):
+    st.header("📝 Registro de Nuevo Estudiante")
+    with st.form("registro"):
         col1, col2 = st.columns(2)
         with col1:
-            nombre = st.text_input("Nombre Completo:")
-            cedula = st.text_input("Número de Cédula:")
+            st.text_input("Nombre Completo:")
+            st.text_input("Cédula:")
         with col2:
-            telefono = st.text_input("Número de Teléfono:")
-            programa = st.selectbox("Programa de Interés:", ["Asistente Legal", "Gestor Bancario", "Contabilidad", "Procesos Industriales", "Inglés"])
-        
-        direccion = st.text_area("Dirección Exacta de Residencia:")
-        
-        enviar = st.form_submit_button("CONFIRMAR MATRÍCULA")
-        
-        if enviar:
-            if nombre and cedula and telefono and direccion:
-                st.success(f"✅ ¡Registro Exitoso! Bienvenido al CETEP, {nombre}. Nos comunicaremos al {telefono}.")
-                st.balloons()
-            else:
-                st.error("⚠️ Todos los campos son obligatorios para el registro legal.")
-
-elif opcion == "Información":
-    st.header("Sobre Nosotros")
-    st.info("Ubicados en Heredia, enfocados en el éxito profesional de nuestros estudiantes.")
+            st.text_input("Teléfono:")
+            st.selectbox("Técnico:", ["Asistente Legal", "Bancario", "Contabilidad", "Industrial", "Inglés"])
+        st.text_area("Dirección:")
+        st.form_submit_button("Matricular")
 
 elif opcion == "Campus Virtual":
-    st.markdown("<h2 style='text-align: center;'>🔐 Acceso al Campus</h2>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>🔐 Campus Virtual CETEP</h2>", unsafe_allow_html=True)
     
-    tipo_acceso = st.selectbox("Tipo de Usuario:", ["Estudiante", "Profesor", "Director"])
+    perfil = st.selectbox("Acceder como:", ["Estudiante", "Docente", "Administración"])
     
-    if tipo_acceso == "Estudiante":
-        cedula_log = st.text_input("Ingrese su Cédula (con guiones):", placeholder="1-1111-1111")
-        if st.button("Ver Mis Notas y Temario"):
-            if cedula_log in notas_ejemplo:
-                datos = notas_ejemplo[cedula_log]
-                st.success(f"Bienvenido(a), {datos['Nombre']}")
-                t_est1, t_est2 = st.tabs(["📊 Mi Progreso", "📚 Temario"])
-                with t_est1:
-                    for materia, nota in datos['Notas'].items():
-                        st.markdown(f"<div class='nota-card'><strong>{materia}:</strong> {nota}</div>", unsafe_allow_html=True)
-                with t_est2:
-                    st.write(f"Plan de estudios oficial para {datos['Carrera']}.")
+    if perfil == "Estudiante":
+        cedula_log = st.text_input("Ingrese su número de cédula:", placeholder="1-1111-1111")
+        if st.button("Ingresar a mi Panel"):
+            if cedula_log in base_datos:
+                alumno = base_datos[cedula_log]
+                st.success(f"Bienvenido(a), {alumno['Nombre']}")
+                
+                # Pestañas de Estudiante
+                tab_cursos, tab_temario, tab_notas = st.tabs(["📚 Mis Cursos", "📖 Temarios", "📊 Mis Notas"])
+                
+                with tab_cursos:
+                    st.subheader("Cursos Activos")
+                    for curso in alumno['Cursos_Inscritos']:
+                        st.markdown(f"<div class='card-academica'>🔹 {curso}</div>", unsafe_allow_html=True)
+                
+                with tab_temario:
+                    st.subheader(f"Plan de Estudios - {alumno['Carrera']}")
+                    for item in alumno['Temario']:
+                        st.write(item)
+                    st.button("📥 Descargar Guía Académica (PDF)")
+                
+                with tab_notas:
+                    st.subheader("Reporte de Calificaciones")
+                    df_notas = pd.DataFrame(alumno['Notas'])
+                    st.table(df_notas)
             else:
-                st.error("Cédula no registrada en el sistema.")
+                st.error("Cédula no encontrada. Por favor verifique o contacte a soporte.")
 
-    elif tipo_acceso == "Profesor":
-        clave_p = st.text_input("Contraseña Docente:", type="password")
-        if st.button("Ingresar Panel Docente"):
-            if clave_p == "profe_cetep":
-                st.success("Acceso concedido.")
+    elif perfil == "Docente":
+        st.text_input("Clave Docente:", type="password")
+        if st.button("Entrar"): st.info("Panel Docente habilitado.")
 
-    elif tipo_acceso == "Director":
-        clave_d = st.text_input("Contraseña Director:", type="password")
-        if st.button("Ingresar Panel Dirección"):
-            if clave_d == "admin_cetep":
-                st.success(f"Bienvenido, Luis Varela")
-                st.metric("Ingresos Mes", "₡1,250,000")
+    elif perfil == "Administración":
+        clave = st.text_input("Clave Director:", type="password")
+        if st.button("Entrar"): 
+            if clave == "admin_cetep": st.success("Acceso concedido, Luis.")
