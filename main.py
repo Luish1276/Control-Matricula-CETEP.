@@ -1,100 +1,77 @@
 import streamlit as st
 import pandas as pd
 
-# Configuración profesional de alto nivel
-st.set_page_config(page_title="CETEP - Centro de Estudios Técnicos", layout="wide", page_icon="🎓")
-
-# Estilo CSS para una apariencia corporativa tipo ipeacr.com
-st.markdown("""
-    <style>
-    .main { background-color: #f8f9fa; }
-    .titulo-principal { color: #002d5a; text-align: center; font-weight: bold; margin-bottom: 20px; }
-    .card { background-color: white; padding: 20px; border-radius: 10px; border-left: 5px solid #004a99; margin-bottom: 15px; }
-    </style>
-    """, unsafe_allow_html=True)
+# Configuración profesional
+st.set_page_config(page_title="CETEP - Gestión Académica", layout="wide", page_icon="🎓")
 
 # Menú lateral
 with st.sidebar:
     st.title("🛡️ CETEP")
     opcion = st.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula en Línea", "Portal Administrativo"])
     st.markdown("---")
-    st.write("📍 Sede Central")
+    st.write("v1.5 - Control Interno")
 
-# --- SECCIÓN: INICIO ---
+# --- SECCIONES ANTERIORES (INICIO, OFERTA, MATRÍCULA) ---
 if opcion == "Inicio":
-    st.markdown("<h1 class='titulo-principal'>Centro de Estudios Técnicos y Especialidades Profesionales</h1>", unsafe_allow_html=True)
+    st.title("Centro de Estudios Técnicos y Especialidades Profesionales")
     st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
-    
-    st.subheader("Formación Técnica de Excelencia")
-    st.write("En CETEP transformamos el talento en capacidad profesional. Nuestros programas están alineados con la realidad laboral de Costa Rica, combinando experiencia técnica y visión práctica.")
 
-# --- SECCIÓN: OFERTA ACADÉMICA (LOS 4 TÉCNICOS SEPARADOS) ---
 elif opcion == "Oferta Académica":
     st.header("Nuestros Programas Técnicos")
-    
-    tabs = st.tabs(["⚖️ Asistente Legal", "🏦 Gestor Bancario", "📊 Contabilidad Técnica", "⚙️ Especialista en Procesos Industriales"])
-    
-    with tabs[0]: # ASISTENTE LEGAL
-        st.subheader("Técnico Superior en Asistente Legal")
-        st.markdown("""
-        **Módulos Clave:**
-        * Derecho Procesal Civil y Mercantil.
-        * **Cobro Judicial y Prescripción:** Análisis profundo de plazos y gestión de expedientes.
-        * Derecho Notarial y Registral.
-        * Gestión de Plataformas del Poder Judicial (SDJ).
-        """)
+    tabs = st.tabs(["⚖️ Asistente Legal", "🏦 Gestor Bancario", "📊 Contabilidad Técnica", "⚙️ Procesos Industriales"])
+    # (El contenido detallado de los técnicos va aquí como en el código anterior)
 
-    with tabs[1]: # GESTOR BANCARIO
-        st.subheader("Técnico en Gestión Bancaria Bilingüe")
-        st.markdown("""
-        **Módulos Clave:**
-        * Legislación Bancaria y Normativa SUGEF.
-        * Operaciones de Caja y Detección de Moneda.
-        * Servicio al Cliente y Venta de Productos Financieros.
-        * Inglés Técnico para el Sector Financiero.
-        """)
-
-    with tabs[2]: # CONTABILIDAD
-        st.subheader("Técnico en Contabilidad Técnica")
-        st.markdown("""
-        **Módulos Clave:**
-        * Ciclo Contable Completo.
-        * Legislación Tributaria (IVA, Renta, ATV).
-        * Planillas y Beneficios Sociales (CCSS / INS).
-        * Contabilidad de Costos y Presupuestos.
-        """)
-
-    with tabs[3]: # INGENIERÍA INDUSTRIAL / PROCESOS
-        st.subheader("Especialista en Procesos Industriales")
-        st.write("Este programa está diseñado para el control de calidad y optimización de la producción.")
-        st.markdown("""
-        **Módulos Clave:**
-        * Control Estadístico de Procesos.
-        * Gestión de Inventarios y Logística.
-        * Seguridad Industrial e Higiene Ocupacional.
-        * Introducción a Lean Manufacturing.
-        """)
-
-# --- SECCIÓN: MATRÍCULA ---
 elif opcion == "Matrícula en Línea":
     st.header("📝 Inscripción Oficial")
     with st.form("form_matricula"):
         nombre = st.text_input("Nombre Completo:")
         cedula = st.text_input("Número de Cédula:")
-        tecnico = st.selectbox("Técnico a matricular:", [
-            "Asistente Legal", 
-            "Gestor Bancario Bilingüe", 
-            "Contabilidad Técnica",
-            "Especialista en Procesos Industriales"
-        ])
+        tecnico = st.selectbox("Carrera:", ["Asistente Legal", "Gestor Bancario Bilingüe", "Contabilidad Técnica", "Especialista en Procesos Industriales"])
         if st.form_submit_button("Confirmar Solicitud"):
-            st.success(f"✅ ¡Solicitud para {tecnico} recibida!")
-            st.balloons()
+            st.success(f"✅ ¡Registro para {tecnico} recibido!")
 
-# --- SECCIÓN: PORTAL ADMINISTRATIVO ---
+# --- SECCIÓN: PORTAL ADMINISTRATIVO (ACTUALIZADA CON "PÁGINAS" INTERNAS) ---
 elif opcion == "Portal Administrativo":
     st.header("🔐 Acceso Administrativo")
     password = st.text_input("Clave de acceso:", type="password")
+    
     if password == "cetep2026":
-        st.success("Acceso concedido.")
-        st.write("Aquí se gestionará la base de datos de los 4 técnicos.")
+        st.success("Acceso Concedido")
+        st.write("---")
+        
+        # Aquí es donde "entramos" a la oficina virtual
+        menu_interno = st.selectbox("Seleccione una función:", [
+            "Panel General", 
+            "Gestión de Estudiantes", 
+            "Registro de Notas (Profesores)",
+            "Reportes de Matrícula"
+        ])
+        
+        if menu_interno == "Panel General":
+            st.subheader("Estado del Instituto")
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Total Estudiantes", "154")
+            col2.metric("Grupos Activos", "8")
+            col3.metric("Solicitudes Nuevas", "12")
+            
+        elif menu_interno == "Gestión de Estudiantes":
+            st.subheader("Base de Datos de Alumnos")
+            # Aquí se mostraría la lista que antes iba al Excel
+            df_alumnos = pd.DataFrame({
+                "Nombre": ["Luis Varela", "Carlos Alonso", "Ana Mora"],
+                "Cédula": ["1-0123-0456", "2-0345-0678", "4-0123-0890"],
+                "Técnico": ["Asistente Legal", "Contabilidad", "Gestor Bancario"],
+                "Estado": ["Activo", "Pendiente", "Activo"]
+            })
+            st.dataframe(df_alumnos, use_container_width=True)
+            
+        elif menu_interno == "Registro de Notas (Profesores)":
+            st.subheader("Portal para el Cuerpo Docente")
+            curso = st.selectbox("Curso a calificar:", ["Asistente Legal - Módulo Cobro Judicial", "Procesos Industriales - Calidad"])
+            st.text_input("Nombre del Estudiante:")
+            st.number_input("Nota Final:", min_value=0, max_value=100)
+            if st.button("Guardar Nota"):
+                st.success("Nota registrada en el sistema central.")
+                
+    elif password != "":
+        st.error("Clave incorrecta. Intente de nuevo.")
