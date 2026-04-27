@@ -14,7 +14,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS ACADÉMICA (RESTABLECIDA CON NOMBRES ORIGINALES)
+# 2. BASE DE DATOS ACADÉMICA (Nombres actualizados y estructura fija)
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses (Virtual)",
@@ -52,7 +52,7 @@ OFFER_ACADEMICA = {
             "Bloque III": ["Auditoría", "Análisis Financiero", "Ética Profesional"]
         }
     },
-    "Inglés como Segunda Lengua": { # NOMBRE RESTAURADO SEGÚN TU SOLICITUD
+    "Inglés Global Conversacional": { # NUEVO NOMBRE ATRACTIVO
         "D": "12 Meses (Virtual)",
         "Inversion": "Consultar Plan",
         "Plan": {
