@@ -14,7 +14,6 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # 2. BASE DE DATOS ESTRUCTURADA (Malla Curricular Original CETEP)
-# Se han transformado los contenidos para evitar infracción de derechos de autor
 OFFER_ACADEMICA = {
     "Asistente Legal": {
         "D": "1 Año",
@@ -76,10 +75,10 @@ if 'alumnos_db' not in st.session_state:
 with st.sidebar:
     st.title("🛡️ Panel CETEP")
     nav = st.radio("Secciones", ["Inicio", "Oferta Académica", "Matrícula", "Campus Virtual"])
-    st.info("Contacto: 506 8630 0233")
+    st.info("Sede: Heredia, Costa Rica")
 
 if nav == "Inicio":
-    st.markdown("<h1 class='main-title'>CETEP: Formación de Excelencia</h1>", unsafe_allow_width=True)
+    st.markdown("<h1 class='main-title'>CETEP: Formación de Excelencia</h1>", unsafe_allow_html=True)
     st.image("https://images.unsplash.com/photo-1523240715634-d9c2ae919f6e?auto=format&fit=crop&q=80&w=1200")
     st.write("### Transformamos tu carrera profesional con técnicos de alta demanda laboral.")
 
@@ -100,8 +99,11 @@ elif nav == "Matrícula":
         ced = c1.text_input("Cédula:")
         cur = c2.selectbox("Elegir Programa:", list(OFFER_ACADEMICA.keys()))
         if st.form_submit_button("Formalizar Registro"):
-            st.session_state['alumnos_db'].append({"Nombre": n, "Cédula": ced, "Curso": cur, "Nota": 0})
-            st.success("Alumno matriculado correctamente.")
+            if n and ced:
+                st.session_state['alumnos_db'].append({"Nombre": n, "Cédula": ced, "Curso": cur, "Nota": 0})
+                st.success("Alumno matriculado correctamente.")
+            else:
+                st.error("Por favor complete nombre y cédula.")
 
 elif nav == "Campus Virtual":
     st.header("🔐 Acceso Autorizado")
@@ -113,7 +115,6 @@ elif nav == "Campus Virtual":
             t1, t2 = st.tabs(["📊 Dashboard de Gestión", "🔎 Auditoría de Notas"])
             with t1:
                 st.metric("Matrícula Total", len(st.session_state['alumnos_db']))
-                st.write("Base de datos de estudiantes:")
                 st.dataframe(pd.DataFrame(st.session_state['alumnos_db']))
             with t2:
                 st.subheader("Control de Calificaciones para Reclamos")
@@ -130,4 +131,4 @@ elif nav == "Campus Virtual":
             else:
                 st.error("Cédula no encontrada.")
 
-st.markdown("<div class='footer-legal'>© 2026 CETEP Costa Rica. El contenido de estos programas es propiedad intelectual de CETEP. Queda prohibida su reproducción total o parcial.</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer-legal'>© 2026 CETEP Costa Rica. Contenido original bajo estándares internacionales.</div>", unsafe_allow_html=True)
