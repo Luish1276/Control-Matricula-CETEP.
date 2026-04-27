@@ -14,9 +14,9 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS ACADÉMICA (Manteniendo todo lo construido)
+# 2. BASE DE DATOS ACADÉMICA COMPLETA (RESTAURADA Y CORREGIDA)
 OFFER_ACADEMICA = {
-    "Técnico en Operaciones Bancarias y Gestión de Efectivo": { # NOMBRE ACTUALIZADO
+    "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses (Virtual)",
         "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Plan": {
@@ -42,29 +42,38 @@ OFFER_ACADEMICA = {
             "Módulo B": ["Seguridad Industrial", "Gestión de Proyectos", "Industria 4.0"],
             "Módulo C": ["Sostenibilidad", "Liderazgo", "Proyecto Integrador"]
         }
+    },
+    "Técnico en Contabilidad": { # RESTAURADO
+        "D": "1 Año (Virtual)",
+        "Inversion": "Consultar Plan",
+        "Plan": {
+            "Bloque I": ["Contabilidad Básica e Intermedia", "Legislación Comercial", "Informática Contable"],
+            "Bloque II": ["Legislación Tributaria (IVA/Renta)", "Costos e Inventarios", "Planillas y CCSS"],
+            "Bloque III": ["Auditoría", "Análisis Financiero", "Ética Profesional"]
+        }
+    },
+    "Inglés para Profesionales": { # RESTAURADO (El que faltaba)
+        "D": "12 Meses (Virtual)",
+        "Inversion": "Consultar Plan",
+        "Plan": {
+            "Niveles Iniciales": ["Fonética y Pronunciación", "Gramática Esencial", "Inglés de Oficina"],
+            "Niveles Medios": ["Business English", "Redacción Técnica", "Comunicación para Negocios"],
+            "Niveles Superiores": ["Inglés Legal", "Negociación Internacional", "Certificación B2"]
+        }
+    },
+    "Prep. Colegio de Abogados": {
+        "D": "Curso Intensivo",
+        "Inversion": "Consultar Plan",
+        "Plan": {
+            "Ejes": ["Civil y Mercantil", "Penal y Familia", "Público y Constitucional", "Deontología Jurídica"]
+        }
     }
 }
 
-# 3. PERSISTENCIA DE DATOS (Simulación de DB)
+# 3. PERSISTENCIA DE DATOS
 if 'alumnos_db' not in st.session_state:
-    # Estado inicial: Luis como Director y un ejemplo de alumno con pagos
     st.session_state['alumnos_db'] = [
-        {
-            "Nombre": "Luis Varela", 
-            "Cédula": "1-0000-0000", 
-            "Curso": "Director", 
-            "Matricula": "PAGADA",
-            "Semana_Actual": "Al día",
-            "Saldo_Pendiente": 0
-        },
-        {
-            "Nombre": "Estudiante Ejemplo", 
-            "Cédula": "1-1111-1111", 
-            "Curso": "Técnico en Operaciones Bancarias y Gestión de Efectivo", 
-            "Matricula": "PAGADA",
-            "Semana_Actual": "PENDIENTE",
-            "Saldo_Pendiente": 5000
-        }
+        {"Nombre": "Luis Varela", "Cédula": "1-0000-0000", "Curso": "Director", "Matricula": "PAGADA", "Semana_Actual": "Al día", "Saldo_Pendiente": 0}
     ]
 
 # 4. NAVEGACIÓN
@@ -78,7 +87,13 @@ with st.sidebar:
 if nav == "Inicio":
     st.markdown("<h1 class='main-title'>CETEP: Formación Técnica Especializada</h1>", unsafe_allow_html=True)
     st.image("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&q=80&w=1200")
-    st.info("💡 **NUEVO MODELO DE PAGO:** Matrícula ₡10,000 y solo ₡5,000 por semana.")
+    st.info("💡 **MODELO ACCESIBLE:** Matrícula ₡10,000 y solo ₡5,000 por semana en banca.")
+    
+    st.write("### Horarios Disponibles (Modalidad Virtual):")
+    c1, c2, c3 = st.columns(3)
+    with c1: st.success("☀️ **Mañana:** 9am - 11am")
+    with c2: st.success("⛅ **Tarde:** 2pm - 4pm")
+    with c3: st.success("🌙 **Noche:** 6pm - 8pm")
 
 elif nav == "Oferta Académica":
     st.header("Programas Técnicos Disponibles")
@@ -92,52 +107,36 @@ elif nav == "Oferta Académica":
 
 elif nav == "Matrícula":
     st.header("📝 Registro de Estudiantes")
-    st.write("Inicie su carrera con una inversión accesible.")
     with st.form("mat"):
         n = st.text_input("Nombre Completo:")
         c = st.text_input("Cédula:")
         cur = st.selectbox("Carrera:", list(OFFER_ACADEMICA.keys()))
-        horario = st.selectbox("Horario deseado:", ["Mañana (9-11 am)", "Noche (6-8 pm)"])
+        hor = st.selectbox("Horario:", ["Mañana (9-11 am)", "Tarde (2-4 pm)", "Noche (6-8 pm)"])
         if st.form_submit_button("Formalizar Matrícula"):
             if n and c:
                 st.session_state['alumnos_db'].append({
-                    "Nombre": n, "Cédula": c, "Curso": cur, 
+                    "Nombre": n, "Cédula": c, "Curso": cur, "Horario": hor,
                     "Matricula": "PENDIENTE", "Semana_Actual": "PENDIENTE", "Saldo_Pendiente": 15000
                 })
-                st.success(f"¡Registro exitoso! Por favor proceda al pago de la matrícula (₡10,000) y su primer semana (₡5,000).")
-            else:
-                st.error("Por favor complete todos los datos.")
+                st.success(f"¡Registro exitoso! Matrícula ₡10,000 + 1ra Semana ₡5,000.")
 
 elif nav == "Campus Virtual":
-    st.header("🔐 Acceso Académico y Financiero")
+    st.header("🔐 Acceso Académico")
     p = st.selectbox("Tipo de Usuario:", ["Director", "Estudiante"])
-    
     if p == "Director":
-        if st.text_input("Clave de Acceso:", type="password") == "admin_cetep":
+        if st.text_input("Clave:", type="password") == "admin_cetep":
             st.success("Panel de Control: Luis Varela")
-            st.write("### Control de Cobros y Estudiantes")
-            df = pd.DataFrame(st.session_state['alumnos_db'])
-            st.dataframe(df)
-            
+            st.dataframe(pd.DataFrame(st.session_state['alumnos_db']))
     elif p == "Estudiante":
         cl = st.text_input("Ingrese su Cédula:")
-        if st.button("Consultar Mi Estado"):
+        if st.button("Consultar Estado"):
             alu = next((x for x in st.session_state['alumnos_db'] if x['Cédula'] == cl), None)
             if alu:
                 st.subheader(f"Bienvenido, {alu['Nombre']}")
-                c1, c2 = st.columns(2)
-                with c1:
-                    st.write("**Curso:**", alu['Curso'])
-                    st.write("**Matrícula:**", alu['Matricula'])
-                with c2:
-                    st.write("**Semana Actual:**", alu['Semana_Actual'])
-                    st.metric("Saldo Pendiente", f"₡{alu['Saldo_Pendiente']}")
-                
+                st.metric("Saldo Pendiente", f"₡{alu['Saldo_Pendiente']}")
                 if alu['Saldo_Pendiente'] > 10000:
-                    st.error("⚠️ Su acceso a lecciones está en riesgo de suspensión. Favor ponerse al día.")
+                    st.error("⚠️ Acceso restringido. Favor ponerse al día.")
                 else:
-                    st.success("✅ Acceso habilitado a clases virtuales.")
-            else:
-                st.error("Cédula no registrada.")
+                    st.success("✅ Acceso habilitado.")
 
 st.markdown("<div class='footer-legal'>© 2026 CETEP | Educación Accesible | Sede San José, Costa Rica.</div>", unsafe_allow_html=True)
