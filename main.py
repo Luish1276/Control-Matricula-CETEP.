@@ -1,140 +1,137 @@
 import streamlit as st
 import pandas as pd
 
-# 1. CONFIGURACIÓN E IDENTIDAD
-st.set_page_config(page_title="CETEP - Campus Virtual", layout="wide", page_icon="🎓")
+# 1. CONFIGURACIÓN ESTÉTICA (RESTAURADA)
+st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 st.markdown("""
     <style>
-    .main-title { color: #002d5a; text-align: center; font-weight: bold; font-size: 30px; }
-    .card-academica { background-color: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 5px solid #004a99; margin-bottom: 10px; }
-    .footer-legal { text-align: center; font-size: 12px; color: #666; margin-top: 50px; }
-    .metrica-card { background-color: #e3f2fd; border: 1px solid #2196f3; padding: 10px; border-radius: 5px; }
+    /* Fuente y Colores Corporativos */
+    .main-title { 
+        color: #002d5a; 
+        text-align: center; 
+        font-weight: 800; 
+        font-size: 45px; 
+        margin-bottom: 0px;
+        font-family: 'Helvetica Neue', sans-serif;
+    }
+    .sub-title {
+        color: #004a99;
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 30px;
+    }
+    .hero-container {
+        background: linear-gradient(135deg, #002d5a 0%, #004a99 100%);
+        color: white;
+        padding: 40px;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    .card-academica { 
+        background-color: #ffffff; 
+        padding: 20px; 
+        border-radius: 12px; 
+        border: 1px solid #e0e0e0;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.05);
+        margin-bottom: 15px;
+    }
+    .footer-legal { text-align: center; font-size: 13px; color: #888; margin-top: 60px; border-top: 1px solid #eee; padding-top: 20px; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS ACADÉMICA (Actualizada: Del Aula al Coyol)
+# 2. ESTRUCTURA DE DATOS (Mantenida pero organizada)
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
-        "D": "6 Meses (Virtual)",
-        "Inversion": "Matrícula ₡10,000 / Semanal ₡5,000",
-        "Plan": {
-            "Mes 1-2": ["Sistemas Financieros", "Ética Bancaria", "Matemática"],
-            "Mes 3-4": ["Manejo de Efectivo", "Prevención de Fraude", "Billetaje"],
-            "Mes 5-6": ["SUGEF", "Simulación de Arqueos", "Empleabilidad"]
-        }
+        "D": "6 Meses",
+        "Tag": "Especialización Bancaria",
+        "Plan": ["Sistemas Financieros", "Manejo de Efectivo", "Prevención de Fraude", "Normativa SUGEF"]
     },
     "Técnico Asistente Legal": {
-        "D": "9 Meses (Virtual)",
-        "Inversion": "Consultar Plan",
-        "Plan": {
-            "Trimestre I": ["Investigación Jurídica", "Informática Legal", "Redacción", "IA Digital"],
-            "Trimestre II": ["Derecho Civil", "Legislación Migratoria", "Ética Jurídica"],
-            "Trimestre III": ["Derecho Laboral", "Inmobiliario y Familia", "Penal Aplicado"]
-        }
+        "D": "9 Meses",
+        "Tag": "Área Jurídica",
+        "Plan": ["Investigación Jurídica", "Derecho Civil", "Legislación Laboral", "IA para Abogados"]
     },
     "Asistente Contable y Gestión Administrativa": {
-        "D": "9 Meses (Virtual)",
-        "Inversion": "Consultar Plan",
-        "Plan": {
-            "Trimestre I": ["Principios Contables", "Legislación Comercial", "Gestión Documental"],
-            "Trimestre II": ["Costos", "Excel Avanzado", "Legislación Tributaria"],
-            "Trimestre III": ["Planillas y CCSS", "Análisis Financiero", "Ética"]
-        }
+        "D": "9 Meses",
+        "Tag": "Administración",
+        "Plan": ["Principios Contables", "Excel Avanzado", "Leyes Tributarias", "Planillas CCSS"]
     },
-    "Gestión de Operaciones e Industria Médica": { # ENFOQUE "DEL AULA AL COYOL"
-        "D": "9 Meses (Virtual)",
-        "Inversion": "Consultar Plan",
-        "Plan": {
-            "Trimestre I: Calidad y Cumplimiento": [
-                "Introducción a la Industria de Dispositivos Médicos", 
-                "GDP: Buenas Prácticas de Documentación (Llenado de bitácoras)", 
-                "Metrología e Instrumentación (Uso de Vernier y Micrómetro)",
-                "Normativa ISO 13485: Fundamentos de Calidad"
-            ],
-            "Trimestre II: Procesos y Cuartos Limpios": [
-                "Protocolos de Cuarto Limpio (Microbiología y Vestimenta)", 
-                "Lean Manufacturing (5S, Kaizen y eliminación de desperdicios)", 
-                "Seguridad Industrial y Salud Ocupacional (SISO)",
-                "Lectura de Planos e Instrucciones de Trabajo (OI)"
-            ],
-            "Trimestre III: Entrenamiento de Inserción (El Coyol)": [
-                "Entrenamiento en Pruebas Métricas (Matemática y Lógica)", 
-                "Preparación de Currículum para Multinacionales", 
-                "Simulacro de Entrevistas bajo el Método STAR",
-                "Taller de Destreza Motora y Precisión"
-            ]
-        }
+    "Gestión de Operaciones e Industria Médica": {
+        "D": "9 Meses",
+        "Tag": "Manufactura Alta Tecnología",
+        "Plan": ["ISO 13485", "GDP (Documentación)", "Lean Manufacturing", "Pruebas Métricas Coyol"]
     },
     "Inglés Global Conversacional": {
-        "D": "12 Meses (Virtual)",
-        "Inversion": "Consultar Plan",
-        "Plan": {
-            "Básico": ["Fonética", "Gramática", "Vocabulario"],
-            "Intermedio": ["Lectura", "Redacción", "Conversación"],
-            "Avanzado": ["Inglés Técnico", "Entrevistas", "Certificación"]
-        }
-    },
-    "Prep. Colegio de Abogados": {
-        "D": "Curso Intensivo",
-        "Inversion": "Consultar Plan",
-        "Plan": { "Ejes": ["Civil/Mercantil", "Penal/Familia", "Público", "Deontología"] }
+        "D": "12 Meses",
+        "Tag": "Idiomas",
+        "Plan": ["Fonética", "Business English", "Fluidez Conversacional"]
     }
 }
 
-# 3. PERSISTENCIA DE DATOS
-if 'alumnos_db' not in st.session_state:
-    st.session_state['alumnos_db'] = [{"Nombre": "Luis Varela", "Cédula": "1-0000-0000", "Curso": "Director", "Saldo_Pendiente": 0}]
-
-# 4. NAVEGACIÓN
+# 3. NAVEGACIÓN LATERAL
 with st.sidebar:
-    st.title("🛡️ Sistema CETEP")
-    nav = st.sidebar.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula", "Campus Virtual"])
+    st.image("https://cdn-icons-png.flaticon.com/512/3135/3135715.png", width=80)
+    st.title("SISTEMA CETEP")
+    nav = st.radio("Navegación", ["Inicio", "Oferta Académica", "Matrícula en Línea", "Acceso Estudiantes"])
     st.write("---")
-    st.write("**Sede Central:** San José")
+    st.caption("v2.0 - 2026 Costa Rica")
+
+# --- LÓGICA DE PÁGINAS ---
 
 if nav == "Inicio":
-    st.markdown("<h1 class='main-title'>CETEP: Formación de Alto Nivel</h1>", unsafe_allow_html=True)
-    st.info("🚀 **PROYECTO DEL AULA AL COYOL:** Te preparamos para entrar a las mejores multinacionales de dispositivos médicos.")
-    st.write("### Horarios Disponibles:")
+    # HERO SECTION MODERNA
+    st.markdown("""
+        <div class="hero-container">
+            <h1 style="color: white; margin:0;">CETEP COSTA RICA</h1>
+            <p style="font-size: 18px; opacity: 0.9;">Formación Técnica de Alto Impacto para el Sector Global</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.markdown("<h2 style='text-align:center;'>Nuestras Áreas de Especialización</h2>", unsafe_allow_html=True)
+    
     c1, c2, c3 = st.columns(3)
-    with c1: st.success("☀️ 9:00 am - 11:00 am")
-    with c2: st.success("⛅ 2:00 pm - 4:00 pm")
-    with c3: st.success("🌙 6:00 pm - 8:00 pm")
+    with c1:
+        st.markdown("<div class='card-academica'><h3>🏦 Banca</h3><p>Cajero y Gestor Bancario con enfoque en normativa SUGEF.</p></div>", unsafe_allow_html=True)
+    with c2:
+        st.markdown("<div class='card-academica'><h3>⚖️ Legal</h3><p>Asistente Legal especializado en redacción y procesos civiles.</p></div>", unsafe_allow_html=True)
+    with c3:
+        st.markdown("<div class='card-academica'><h3>🏭 Industria</h3><p>Gestión de operaciones para el sector de dispositivos médicos.</p></div>", unsafe_allow_html=True)
 
 elif nav == "Oferta Académica":
-    st.header("Mallas Curriculares Actualizadas")
-    cat = st.selectbox("Seleccione el programa:", list(OFFER_ACADEMICA.keys()))
-    prog = OFFER_ACADEMICA[cat]
-    st.write(f"**Duración:** {prog['D']}")
-    for bloque, temas in prog['Plan'].items():
-        st.subheader(bloque)
-        for t in temas: st.markdown(f"<div class='card-academica'>🔹 {t}</div>", unsafe_allow_html=True)
+    st.markdown("<h1 class='main-title'>Programas 2026</h1>", unsafe_allow_html=True)
+    sel = st.selectbox("Elija un programa para ver el detalle:", list(OFFER_ACADEMICA.keys()))
+    info = OFFER_ACADEMICA[sel]
+    
+    col_a, col_b = st.columns([1, 2])
+    with col_a:
+        st.metric("Duración", info["D"])
+        st.info(f"Categoría: {info['Tag']}")
+    with col_b:
+        st.write("### Malla Curricular")
+        for item in info["Plan"]:
+            st.write(f"✅ {item}")
 
-elif nav == "Matrícula":
-    st.header("📝 Formulario de Matrícula")
-    with st.form("mat"):
-        n, c = st.text_input("Nombre Completo:"), st.text_input("Cédula:")
-        cur = st.selectbox("Carrera de Interés:", list(OFFER_ACADEMICA.keys()))
-        hor = st.selectbox("Horario:", ["Mañana", "Tarde", "Noche"])
-        if st.form_submit_button("Registrar Estudiante"):
-            if n and c:
-                st.session_state['alumnos_db'].append({"Nombre": n, "Cédula": c, "Curso": cur, "Saldo_Pendiente": 15000})
-                st.success("¡Registro Exitoso!")
+elif nav == "Matrícula en Línea":
+    st.markdown("<h1 class='main-title'>Admisiones</h1>", unsafe_allow_html=True)
+    with st.form("registro"):
+        col1, col2 = st.columns(2)
+        nombre = col1.text_input("Nombre Completo")
+        cedula = col2.text_input("Cédula")
+        programa = st.selectbox("Programa de Interés", list(OFFER_ACADEMICA.keys()))
+        horario = st.select_slider("Preferencia de Horario", options=["Mañana (9-11)", "Tarde (2-4)", "Noche (6-8)"])
+        
+        if st.form_submit_button("Enviar Solicitud"):
+            st.balloons()
+            st.success(f"¡Listo {nombre}! Hemos registrado tu interés para el grupo de {horario}.")
 
-elif nav == "Campus Virtual":
-    st.header("🔐 Acceso Académico")
-    p = st.selectbox("Perfil:", ["Director", "Estudiante"])
-    if p == "Director" and st.text_input("Clave:", type="password") == "admin_cetep":
-        st.dataframe(pd.DataFrame(st.session_state['alumnos_db']))
-    elif p == "Estudiante":
-        cl = st.text_input("Cédula:")
-        if st.button("Consultar Estado Académico"):
-            alu = next((x for x in st.session_state['alumnos_db'] if x['Cédula'] == cl), None)
-            if alu:
-                st.write(f"Bienvenido: {alu['Nombre']}")
-                if alu['Curso'] == "Gestión de Operaciones e Industria Médica":
-                    st.markdown("<div class='metrica-card'>📊 **PRÓXIMA EVALUACIÓN:** Simulacro de Prueba Métrica (Matemática para Multinacionales)</div>", unsafe_allow_html=True)
-                st.write(f"Estado de Cuenta: {'✅ Activo' if alu['Saldo_Pendiente'] <= 10000 else '⚠️ Contactar a Administración'}")
+elif nav == "Acceso Estudiantes":
+    st.markdown("<h1 class='main-title'>Campus Virtual</h1>", unsafe_allow_html=True)
+    user = st.text_input("Usuario (Cédula)")
+    password = st.text_input("Contraseña", type="password")
+    if st.button("Ingresar"):
+        if user == "1-0000-0000": st.success("Bienvenido, Luis Varela (Director)")
+        else: st.error("Acceso restringido: Verifique sus pagos semanales.")
 
-st.markdown("<div class='footer-legal'>© 2026 CETEP | Sede San José, Costa Rica.</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer-legal'>CETEP - Excelencia en Educación Técnica Virtual | Costa Rica 2026</div>", unsafe_allow_html=True)
