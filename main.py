@@ -1,119 +1,100 @@
 import streamlit as st
 import pandas as pd
 
-# Configuración de la página para que se vea moderna y ancha
-st.set_page_config(page_title="CETEP - Formación Técnica", layout="wide", page_icon="🎓")
+# Configuración profesional de alto nivel
+st.set_page_config(page_title="CETEP - Centro de Estudios Técnicos", layout="wide", page_icon="🎓")
 
-# Estilo CSS para mejorar la apariencia (Colores más sobrios y profesionales)
+# Estilo CSS para una apariencia corporativa tipo ipeacr.com
 st.markdown("""
     <style>
-    .main {
-        background-color: #f5f7f9;
-    }
-    .stButton>button {
-        width: 100%;
-        border-radius: 5px;
-        height: 3em;
-        background-color: #004a99;
-        color: white;
-    }
-    .titulo-principal {
-        color: #002d5a;
-        text-align: center;
-        font-family: 'Arial';
-    }
+    .main { background-color: #f8f9fa; }
+    .titulo-principal { color: #002d5a; text-align: center; font-weight: bold; margin-bottom: 20px; }
+    .card { background-color: white; padding: 20px; border-radius: 10px; border-left: 5px solid #004a99; margin-bottom: 15px; }
     </style>
     """, unsafe_allow_html=True)
 
-# Menú de navegación en la barra lateral
+# Menú lateral
 with st.sidebar:
-    st.image("https://www.freeiconspng.com/uploads/graduation-cap-icon-png-1.png", width=100) # Icono temporal
-    st.title("CETEP")
+    st.title("🛡️ CETEP")
     opcion = st.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula en Línea", "Portal Administrativo"])
     st.markdown("---")
-    st.write("📍 Costa Rica")
+    st.write("📍 Sede Central")
 
-# --- SECCIÓN: INICIO (Estilo similar a ipeacr.com) ---
+# --- SECCIÓN: INICIO ---
 if opcion == "Inicio":
     st.markdown("<h1 class='titulo-principal'>Centro de Estudios Técnicos y Especialidades Profesionales</h1>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align: center; color: #555;'>Excelencia Académica para el Futuro Profesional</h4>", unsafe_allow_html=True)
+    st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
     
-    st.image("https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1200", use_container_width=True) # Imagen profesional de estudio
-    
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.subheader("💡 Nuestra Misión")
-        st.write("Brindar formación técnica de alta calidad para insertar profesionales capacitados en el mercado laboral costarricense.")
-    with col2:
-        st.subheader("🎓 Títulos Técnicos")
-        st.write("Nuestros programas están diseñados bajo los estándares de exigencia que el sector empresarial demanda hoy.")
-    with col3:
-        st.subheader("🤝 Convenios")
-        st.write("Buscamos alianzas estratégicas para que nuestros estudiantes realicen sus prácticas en entornos reales.")
+    st.subheader("Formación Técnica de Excelencia")
+    st.write("En CETEP transformamos el talento en capacidad profesional. Nuestros programas están alineados con la realidad laboral de Costa Rica, combinando experiencia técnica y visión práctica.")
 
-# --- SECCIÓN: OFERTA ACADÉMICA ---
+# --- SECCIÓN: OFERTA ACADÉMICA (LOS 4 TÉCNICOS SEPARADOS) ---
 elif opcion == "Oferta Académica":
-    st.header("Explorá nuestros Programas Técnicos")
+    st.header("Nuestros Programas Técnicos")
     
-    tab1, tab2, tab3 = st.tabs(["Derecho y Legal", "Banca y Finanzas", "Industria"])
+    tabs = st.tabs(["⚖️ Asistente Legal", "🏦 Gestor Bancario", "📊 Contabilidad Técnica", "⚙️ Especialista en Procesos Industriales"])
     
-    with tab1:
-        st.subheader("Asistente Legal")
-        st.write("Formamos expertos en el apoyo de procesos judiciales y notariales.")
+    with tabs[0]: # ASISTENTE LEGAL
+        st.subheader("Técnico Superior en Asistente Legal")
         st.markdown("""
-        **Módulos Destacados:**
-        * Derecho Procesal Civil y Laboral.
-        * Cobro Judicial y Gestión de Cartera.
-        * Derecho Notarial para Asistentes.
+        **Módulos Clave:**
+        * Derecho Procesal Civil y Mercantil.
+        * **Cobro Judicial y Prescripción:** Análisis profundo de plazos y gestión de expedientes.
+        * Derecho Notarial y Registral.
+        * Gestión de Plataformas del Poder Judicial (SDJ).
         """)
-        
-    with tab2:
-        st.subheader("Gestor Bancario Bilingüe")
-        st.write("Capacitación integral para el sector financiero público y privado.")
+
+    with tabs[1]: # GESTOR BANCARIO
+        st.subheader("Técnico en Gestión Bancaria Bilingüe")
         st.markdown("""
-        **Módulos Destacados:**
-        * Legislación Bancaria Costarricense.
-        * Técnicas de Conteo y Detección de Moneda.
-        * Inglés Técnico para Finanzas.
+        **Módulos Clave:**
+        * Legislación Bancaria y Normativa SUGEF.
+        * Operaciones de Caja y Detección de Moneda.
+        * Servicio al Cliente y Venta de Productos Financieros.
+        * Inglés Técnico para el Sector Financiero.
         """)
-    
-    with tab3:
-        st.subheader("Contabilidad y Procesos")
-        st.write("Dominio de las herramientas contables y normativas tributarias vigentes.")
+
+    with tabs[2]: # CONTABILIDAD
+        st.subheader("Técnico en Contabilidad Técnica")
+        st.markdown("""
+        **Módulos Clave:**
+        * Ciclo Contable Completo.
+        * Legislación Tributaria (IVA, Renta, ATV).
+        * Planillas y Beneficios Sociales (CCSS / INS).
+        * Contabilidad de Costos y Presupuestos.
+        """)
+
+    with tabs[3]: # INGENIERÍA INDUSTRIAL / PROCESOS
+        st.subheader("Especialista en Procesos Industriales")
+        st.write("Este programa está diseñado para el control de calidad y optimización de la producción.")
+        st.markdown("""
+        **Módulos Clave:**
+        * Control Estadístico de Procesos.
+        * Gestión de Inventarios y Logística.
+        * Seguridad Industrial e Higiene Ocupacional.
+        * Introducción a Lean Manufacturing.
+        """)
 
 # --- SECCIÓN: MATRÍCULA ---
 elif opcion == "Matrícula en Línea":
-    st.header("📝 Proceso de Inscripción")
-    st.info("Complete el formulario para reservar su espacio en el próximo ciclo lectivo.")
-    
+    st.header("📝 Inscripción Oficial")
     with st.form("form_matricula"):
         nombre = st.text_input("Nombre Completo:")
         cedula = st.text_input("Número de Cédula:")
-        correo = st.text_input("Correo Electrónico:")
-        curso_interes = st.selectbox("Técnico de interés:", ["Asistente Legal", "Gestor Bancario", "Contabilidad"])
-        
-        if st.form_submit_button("Enviar Solicitud"):
-            st.success("✅ Su solicitud ha sido enviada. Un asesor se pondrá en contacto pronto.")
+        tecnico = st.selectbox("Técnico a matricular:", [
+            "Asistente Legal", 
+            "Gestor Bancario Bilingüe", 
+            "Contabilidad Técnica",
+            "Especialista en Procesos Industriales"
+        ])
+        if st.form_submit_button("Confirmar Solicitud"):
+            st.success(f"✅ ¡Solicitud para {tecnico} recibida!")
             st.balloons()
 
-# --- SECCIÓN: PORTAL ADMINISTRATIVO (Gestión para Luis y Profesores) ---
+# --- SECCIÓN: PORTAL ADMINISTRATIVO ---
 elif opcion == "Portal Administrativo":
     st.header("🔐 Acceso Administrativo")
-    password = st.text_input("Contraseña de acceso:", type="password")
-    
-    if password == "cetep2026": # Tu clave privada
-        st.success("Bienvenido al Panel de Control")
-        
-        modo = st.selectbox("Acción:", ["Ver Lista de Alumnos", "Ingresar Notas/Asistencia", "Gestionar Profesores"])
-        
-        if modo == "Ver Lista de Alumnos":
-            # Aquí verías los datos que vienen del formulario
-            data_simulada = {
-                "Fecha": ["25/04/2026", "26/04/2026"],
-                "Estudiante": ["Juan Pérez", "María Rodríguez"],
-                "Curso": ["Asistente Legal", "Gestor Bancario"],
-                "Estado": ["Pendiente de Pago", "Matriculado"]
-            }
-            st.table(pd.DataFrame(data_simulada))
-    elif password != "":
-        st.error("Acceso denegado.")
+    password = st.text_input("Clave de acceso:", type="password")
+    if password == "cetep2026":
+        st.success("Acceso concedido.")
+        st.write("Aquí se gestionará la base de datos de los 4 técnicos.")
