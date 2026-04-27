@@ -29,30 +29,31 @@ st.markdown("""
     }
     .tema-line { padding: 8px 0; border-bottom: 1px solid #eef0f2; font-size: 15px; color: #333; }
 
-    .card-admin {
-        background: #f0f2f6; padding: 20px; border-radius: 10px; border-left: 5px solid #002d5a;
-    }
-    
     .footer { text-align: center; padding: 40px; color: #888; border-top: 1px solid #eee; margin-top: 50px; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. DATA ACADÉMICA (Mallas con Especialización Coyol)
+# 2. DATA ACADÉMICA COMPLETA (Incluye Inglés y Preparación)
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "MES 1-2": ["Sistemas Bancarios CR", "Legislación Financiera", "Ética"],
-            "MES 3-4": ["Manejo de Efectivo", "Detección de Falsos", "Prevención de Fraude"],
-            "MES 5-6": ["Normativa SUGEF", "Arqueos de Caja", "Empleabilidad"]
+            "MÓDULOS TÉCNICOS": ["Sistemas Bancarios CR", "Manejo de Efectivo", "SUGEF"],
+            "GLOBAL LEARNING": ["Inglés Técnico para Finanzas", "Servicio al Cliente Bilingüe"]
         }
     },
-    "Gestión de Operaciones e Industria Médica (Especialización Coyol)": {
+    "Gestión de Operaciones e Industria Médica (Énfasis Coyol)": {
         "D": "9 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "BLOQUE I": ["Intro Industria Médica", "GDP (Documentación)", "Metrología"],
-            "BLOQUE II": ["ISO 13485:2016", "Cuarto Limpio", "Lean Manufacturing"],
-            "BLOQUE III": ["Lectura de Planos", "Pruebas Métricas", "Entrevista STAR"]
+            "MÓDULOS TÉCNICOS": ["ISO 13485:2016", "Metrología", "Cuarto Limpio"],
+            "GLOBAL LEARNING": ["Inglés Industrial", "Interpretación de Documentación en Inglés"]
+        }
+    },
+    "Preparación Examen Excelencia Académica (Abogados)": {
+        "D": "Intensivo", "Inv": "Inversión Cerrada",
+        "Malla": {
+            "ÁREA LEGAL": ["Derecho Civil y Mercantil", "Derecho Público", "Deontología Jurídica"],
+            "ESTRATEGIA": ["Simulacros de Examen", "Jurisprudencia Reciente"]
         }
     }
 }
@@ -71,7 +72,7 @@ if nav == "🏠 Inicio":
     st.markdown("""
         <div class="hero-full">
             <h1 class="hero-title">CONECTANDO TU TALENTO<br>CON LA INDUSTRIA</h1>
-            <p style="font-size: 20px; opacity: 0.9;">Técnicos especializados con mensualidad única de ₡20,000.</p>
+            <p style="font-size: 20px; opacity: 0.9;">Técnicos + Inglés (Global Learning). Matrícula abierta 2026.</p>
         </div>
         """, unsafe_allow_html=True)
     
@@ -83,7 +84,7 @@ if nav == "🏠 Inicio":
     st.write("---")
     c1, c2, c3 = st.columns(3)
     c1.info("🏦 **Banca:** ₡5,000 semanales")
-    c2.info("🏭 **Médica:** Especialización Coyol")
+    c2.info("🏭 **Médica:** Énfasis Coyol")
     c3.info("⚖️ **Legal:** Asistencia y Excelencia")
 
 elif nav == "📚 Oferta Académica":
@@ -103,7 +104,7 @@ elif nav == "📝 Matrícula":
         st.selectbox("Carrera", list(OFFER_ACADEMICA.keys()))
         if st.form_submit_button("RESERVAR MI CUPO"):
             st.balloons()
-            st.success("¡Recibido! Nos comunicaremos para formalizar la matrícula.")
+            st.success("¡Recibido! Te contactaremos para formalizar.")
 
 elif nav == "🔐 Campus Virtual":
     if 'user_type' not in st.session_state: st.session_state.user_type = None
@@ -113,43 +114,27 @@ elif nav == "🔐 Campus Virtual":
         u = st.text_input("Usuario")
         p = st.text_input("Contraseña", type="password")
         if st.button("INGRESAR"):
-            if u == "admin_cetep" and p == "Luis2026": # Acceso Admin
+            if u == "admin_cetep" and p == "Luis2026":
                 st.session_state.user_type = "admin"
                 st.rerun()
-            elif u == "estudiante" and p == "123": # Acceso Estudiante
+            elif u == "estudiante" and p == "123":
                 st.session_state.user_type = "estudiante"
                 st.rerun()
             else: st.error("Credenciales incorrectas")
     
     elif st.session_state.user_type == "admin":
         st.subheader("👨‍💼 Panel Administrativo (admin_cetep)")
-        t1, t2, t3 = st.tabs(["📊 Control Financiero", "📝 Lista de Estudiantes", "📈 Notas Globales"])
+        t1, t2, t3 = st.tabs(["📊 Financiero", "📝 Estudiantes", "📈 Notas"])
         
         with t1:
-            st.write("### Estado de Recaudación Semanal")
-            col_a, col_b = st.columns(2)
-            col_a.metric("Total Recaudado (Semana)", "₡300,000")
-            col_b.metric("Pendientes de Pago", "20 Alumnos")
-            st.warning("Próximo cierre de caja: Sábado 6:00 PM")
+            st.metric("Total Recaudado", "₡300,000", "5,000/alumno")
+            st.write("Control de pagos semanales activo.")
             
         with t2:
             st.write("### Matrícula Activa (Meta 60)")
-            data = {"Nombre": ["Juan P.", "María R.", "Carlos M."], "Técnico": ["Banca", "Médica", "Banca"], "WhatsApp": ["8888-0001", "8888-0002", "8888-0003"]}
-            st.dataframe(pd.DataFrame(data), use_container_width=True)
-
-        with t3:
-            st.write("### Promedios por Módulo")
-            st.bar_chart({"Banca": 92, "Médica": 85, "Legal": 88})
+            st.dataframe(pd.DataFrame({"Nombre": ["Juan", "Ana"], "Técnico": ["Banca", "Médica"]}), use_container_width=True)
 
         if st.button("Cerrar Sesión Admin"):
-            st.session_state.user_type = None
-            st.rerun()
-
-    elif st.session_state.user_type == "estudiante":
-        st.subheader("🎓 Área Estudiantil")
-        # Aquí iría el contenido que vimos antes para el alumno
-        st.info("Bienvenido a tu campus. Aquí verás tus notas y material.")
-        if st.button("Cerrar Sesión Estudiante"):
             st.session_state.user_type = None
             st.rerun()
 
