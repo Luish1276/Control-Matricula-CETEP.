@@ -1,14 +1,17 @@
 import streamlit as st
 from datetime import datetime
 
+# Configuración de la página
 st.set_page_config(page_title="CETEP - Matrícula", page_icon="🎓")
 
+# Título principal corregido
 st.title("🎓 CETEP: Control de Matrícula")
-st.markdown("---")
+st.markdown("### Centro de Estudios Técnicos y Especialidades Profesionales")
+st.write("---")
 
-# Formulario limpio y profesional
+# Formulario de Registro
 with st.form("registro_cetep", clear_on_submit=True):
-    st.subheader("Formulario de Inscripción")
+    st.subheader("Formulario de Inscripción Oficial")
     
     nombre = st.text_input("Nombre Completo del Estudiante:")
     cedula = st.text_input("Cédula de Identidad:")
@@ -26,21 +29,17 @@ with st.form("registro_cetep", clear_on_submit=True):
 
     if boton:
         if nombre and cedula:
-            # Mostramos éxito inmediato al alumno
-            st.success(f"✅ ¡Solicitud de Matrícula Recibida!")
+            st.success(f"✅ ¡Registro Recibido Exitosamente!")
             st.balloons()
             
-            # GUARDADO INTERNO (Temporal para que no se pierda nada)
-            # Esto guarda los datos en la memoria de la página por ahora
+            # Resumen para el estudiante
             fecha = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-            
-            st.info(f"Estudiante: {nombre} \n\nCédula: {cedula} \n\nCurso: {curso} \n\nFecha: {fecha}")
-            
-            # Nota para Luis
-            st.warning("⚠️ Los datos han sido procesados. El sistema administrativo ha sido notificado.")
+            st.info(f"**Comprobante de Ingreso:**\n\n**Estudiante:** {nombre}\n\n**Identificación:** {cedula}\n\n**Programa:** {curso}\n\n**Fecha/Hora:** {fecha}")
         else:
-            st.error("Por favor, complete todos los campos obligatorios.")
+            st.error("Por favor, complete todos los campos obligatorios para procesar la matrícula.")
 
-# Sidebar informativa
-st.sidebar.title("CETEP Heredia")
-st.sidebar.info("Este sistema es para uso exclusivo de estudiantes nuevos.")
+# Barra lateral corregida (Sidebar)
+st.sidebar.title("Administración CETEP")
+st.sidebar.write("Sistema de Gestión Académica v1.0")
+st.sidebar.markdown("---")
+st.sidebar.info("Este formulario es para uso exclusivo de trámites de inscripción técnica.")
