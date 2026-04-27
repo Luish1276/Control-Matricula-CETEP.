@@ -33,27 +33,34 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. DATA ACADÉMICA COMPLETA (Incluye Inglés y Preparación)
+# 2. DATA ACADÉMICA (Sin Coyol + Global Learning Reintegrado)
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "MÓDULOS TÉCNICOS": ["Sistemas Bancarios CR", "Manejo de Efectivo", "SUGEF"],
+            "MÓDULOS TÉCNICOS": ["Sistemas Bancarios de Costa Rica", "Legislación Financiera", "Manejo de Efectivo y Billetaje"],
             "GLOBAL LEARNING": ["Inglés Técnico para Finanzas", "Servicio al Cliente Bilingüe"]
         }
     },
-    "Gestión de Operaciones e Industria Médica (Énfasis Coyol)": {
+    "Gestión de Operaciones e Industria Médica": {
         "D": "9 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "MÓDULOS TÉCNICOS": ["ISO 13485:2016", "Metrología", "Cuarto Limpio"],
-            "GLOBAL LEARNING": ["Inglés Industrial", "Interpretación de Documentación en Inglés"]
+            "MÓDULOS TÉCNICOS": ["Normativa ISO 13485:2016", "Protocolos de Cuarto Limpio", "Metrología e Instrumentación"],
+            "GLOBAL LEARNING": ["Inglés Industrial", "Lectura de Documentación Técnica en Inglés"]
+        }
+    },
+    "Asistente Contable y Gestión Administrativa": {
+        "D": "9 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
+        "Malla": {
+            "MÓDULOS TÉCNICOS": ["Contabilidad General e IVA", "Planillas CCSS/INS", "Excel Financiero"],
+            "GLOBAL LEARNING": ["Inglés para Negocios", "Comunicación Corporativa"]
         }
     },
     "Preparación Examen Excelencia Académica (Abogados)": {
-        "D": "Intensivo", "Inv": "Inversión Cerrada",
+        "D": "Curso Intensivo", "Inv": "Inversión Cerrada",
         "Malla": {
-            "ÁREA LEGAL": ["Derecho Civil y Mercantil", "Derecho Público", "Deontología Jurídica"],
-            "ESTRATEGIA": ["Simulacros de Examen", "Jurisprudencia Reciente"]
+            "ÁREA LEGAL": ["Derecho Civil y Mercantil", "Derecho Público y Administrativo", "Deontología Jurídica"],
+            "ESTRATEGIA": ["Análisis de Jurisprudencia", "Simulacros de Examen de Excelencia"]
         }
     }
 }
@@ -72,11 +79,11 @@ if nav == "🏠 Inicio":
     st.markdown("""
         <div class="hero-full">
             <h1 class="hero-title">CONECTANDO TU TALENTO<br>CON LA INDUSTRIA</h1>
-            <p style="font-size: 20px; opacity: 0.9;">Técnicos + Inglés (Global Learning). Matrícula abierta 2026.</p>
+            <p style="font-size: 20px; opacity: 0.9;">Formación Técnica + Inglés (Global Learning). Único con ₡5,000 semanales.</p>
         </div>
         """, unsafe_allow_html=True)
     
-    st.write("### Meta de Apertura (Ciclo 2026)")
+    st.write("### Estado de Apertura (Meta 60 Estudiantes)")
     col1, col2 = st.columns([3, 1])
     col1.progress(65)
     col2.write("40/60 Cupos")
@@ -84,27 +91,30 @@ if nav == "🏠 Inicio":
     st.write("---")
     c1, c2, c3 = st.columns(3)
     c1.info("🏦 **Banca:** ₡5,000 semanales")
-    c2.info("🏭 **Médica:** Énfasis Coyol")
+    c2.info("🏭 **Médica:** Alta Tecnología")
     c3.info("⚖️ **Legal:** Asistencia y Excelencia")
 
 elif nav == "📚 Oferta Académica":
-    sel = st.selectbox("Seleccione el programa:", list(OFFER_ACADEMICA.keys()))
+    st.header("Programas Disponibles")
+    sel = st.selectbox("Seleccione el técnico de su interés:", list(OFFER_ACADEMICA.keys()))
     info = OFFER_ACADEMICA[sel]
-    st.subheader(f"⏱️ {info['D']} | 💰 {info['Inv']}")
+    st.subheader(f"⏱️ Duración: {info['D']} | 💰 {info['Inv']}")
+    
     for bloque, temas in info['Malla'].items():
         st.markdown(f"<div class='bloque-header'>{bloque}</div>", unsafe_allow_html=True)
         st.markdown("<div class='temario-box'>", unsafe_allow_html=True)
-        for t in temas: st.markdown(f"<div class='tema-line'>✅ {t}</div>", unsafe_allow_html=True)
+        for t in temas:
+            st.markdown(f"<div class='tema-line'>✅ {t}</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
 elif nav == "📝 Matrícula":
     st.header("Formulario de Admisión")
     with st.form("reg"):
         st.text_input("Nombre Completo"), st.text_input("WhatsApp")
-        st.selectbox("Carrera", list(OFFER_ACADEMICA.keys()))
+        st.selectbox("Carrera de Interés", list(OFFER_ACADEMICA.keys()))
         if st.form_submit_button("RESERVAR MI CUPO"):
             st.balloons()
-            st.success("¡Recibido! Te contactaremos para formalizar.")
+            st.success("¡Recibido! Nos comunicaremos con usted para formalizar el cupo.")
 
 elif nav == "🔐 Campus Virtual":
     if 'user_type' not in st.session_state: st.session_state.user_type = None
@@ -127,15 +137,17 @@ elif nav == "🔐 Campus Virtual":
         t1, t2, t3 = st.tabs(["📊 Financiero", "📝 Estudiantes", "📈 Notas"])
         
         with t1:
-            st.metric("Total Recaudado", "₡300,000", "5,000/alumno")
-            st.write("Control de pagos semanales activo.")
+            st.write("### Control Financiero")
+            st.metric("Total Semanal Recaudado", "₡300,000")
+            st.info("Mantenimiento de becas de ₡5,000 semanales activo.")
             
         with t2:
-            st.write("### Matrícula Activa (Meta 60)")
-            st.dataframe(pd.DataFrame({"Nombre": ["Juan", "Ana"], "Técnico": ["Banca", "Médica"]}), use_container_width=True)
+            st.write("### Lista de Estudiantes (Matrícula Activa)")
+            data_est = {"Nombre": ["Juan Pérez", "Ana Rojas"], "Programa": ["Banca", "Médica"], "Saldo": ["Al día", "Al día"]}
+            st.dataframe(pd.DataFrame(data_est), use_container_width=True)
 
-        if st.button("Cerrar Sesión Admin"):
+        if st.button("Cerrar Sesión"):
             st.session_state.user_type = None
             st.rerun()
 
-st.markdown("<div class='footer'>© 2026 CETEP | Costa Rica</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>© 2026 CETEP | Centro de Estudios Técnicos Profesionales | Costa Rica</div>", unsafe_allow_html=True)
