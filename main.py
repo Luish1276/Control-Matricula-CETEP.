@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 
-# 1. CONFIGURACIÓN DE PÁGINA (ESTILO ELITE)
+# 1. CONFIGURACIÓN DE PÁGINA
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 st.markdown("""
@@ -12,7 +12,7 @@ st.markdown("""
 
     .hero-full {
         background: linear-gradient(rgba(0,30,60,0.7), rgba(0,30,60,0.9)), 
-                    url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&q=80&w=1920');
+                    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1920');
         background-size: cover; background-position: center; padding: 100px 20px; color: white; text-align: center;
         border-radius: 0px 0px 50px 50px; margin: -60px -20px 40px -20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2);
     }
@@ -33,34 +33,41 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. DATA ACADÉMICA (Sin Coyol + Global Learning Reintegrado)
+# 2. DATA ACADÉMICA (Estructura de 12 + 12 meses)
 OFFER_ACADEMICA = {
+    "Global Learning: English Mastery - Nivel I (Primeros 12 meses)": {
+        "D": "12 Meses (Fundamentos y Fluidez Inicial)", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
+        "Malla": {
+            "ETAPA DE CIMENTACIÓN": ["Estructura Gramatical Sólida", "Fonética y Pronunciación", "Listening Comprensivo"],
+            "ETAPA DE FLUIDEZ": ["Conversación Situacional", "Vocabulario Expandido", "Lectura y Comprensión de Textos"]
+        }
+    },
+    "Global Learning: English Mastery - Nivel II (Segundos 12 meses)": {
+        "D": "12 Meses (Perfeccionamiento y Bilingüismo)", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
+        "Malla": {
+            "ETAPA AVANZADA": ["Inglés de Negocios y Corporativo", "Debate y Argumentación en Vivo", "Redacción Profesional"],
+            "DOMINIO TOTAL": ["Bilingüismo para Alta Gerencia", "Simulación de Entrevistas Internacionales", "Comprensión Nativa"]
+        }
+    },
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "MÓDULOS TÉCNICOS": ["Sistemas Bancarios de Costa Rica", "Legislación Financiera", "Manejo de Efectivo y Billetaje"],
-            "GLOBAL LEARNING": ["Inglés Técnico para Finanzas", "Servicio al Cliente Bilingüe"]
+            "MÓDULOS TÉCNICOS": ["Sistemas Bancarios CR", "Legislación Financiera", "Manejo de Efectivo"],
+            "MÓDULO INTEGRADO": ["Global Learning: English Mastery (Módulos Base)"]
         }
     },
     "Gestión de Operaciones e Industria Médica": {
         "D": "9 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
         "Malla": {
-            "MÓDULOS TÉCNICOS": ["Normativa ISO 13485:2016", "Protocolos de Cuarto Limpio", "Metrología e Instrumentación"],
-            "GLOBAL LEARNING": ["Inglés Industrial", "Lectura de Documentación Técnica en Inglés"]
-        }
-    },
-    "Asistente Contable y Gestión Administrativa": {
-        "D": "9 Meses", "Inv": "Matrícula ₡10,000 / Semanal ₡5,000",
-        "Malla": {
-            "MÓDULOS TÉCNICOS": ["Contabilidad General e IVA", "Planillas CCSS/INS", "Excel Financiero"],
-            "GLOBAL LEARNING": ["Inglés para Negocios", "Comunicación Corporativa"]
+            "MÓDULOS TÉCNICOS": ["ISO 13485:2016", "Protocolos de Cuarto Limpio", "Metrología"],
+            "MÓDULO INTEGRADO": ["Global Learning: English Mastery (Módulos Base)"]
         }
     },
     "Preparación Examen Excelencia Académica (Abogados)": {
-        "D": "Curso Intensivo", "Inv": "Inversión Cerrada",
+        "D": "Curso Intensivo", "Inv": "Consultar Plan de Pagos",
         "Malla": {
-            "ÁREA LEGAL": ["Derecho Civil y Mercantil", "Derecho Público y Administrativo", "Deontología Jurídica"],
-            "ESTRATEGIA": ["Análisis de Jurisprudencia", "Simulacros de Examen de Excelencia"]
+            "ÁREA LEGAL": ["Derecho Civil y Mercantil", "Derecho Público", "Deontología Jurídica"],
+            "REFORZAMIENTO": ["Simulacros de Examen", "Análisis de Fallos Recientes"]
         }
     }
 }
@@ -72,33 +79,33 @@ with st.sidebar:
     else:
         st.markdown("<h2 style='text-align:center; color:#002d5a;'>CETEP</h2>", unsafe_allow_html=True)
     st.write("---")
-    nav = st.radio("MENÚ PRINCIPAL", ["🏠 Inicio", "📚 Oferta Académica", "📝 Matrícula", "🔐 Campus Virtual"])
+    nav = st.radio("MENÚ", ["🏠 Inicio", "📚 Oferta Académica", "📝 Matrícula", "🔐 Campus Virtual"])
 
 # 4. PÁGINAS
 if nav == "🏠 Inicio":
     st.markdown("""
         <div class="hero-full">
-            <h1 class="hero-title">CONECTANDO TU TALENTO<br>CON LA INDUSTRIA</h1>
-            <p style="font-size: 20px; opacity: 0.9;">Formación Técnica + Inglés (Global Learning). Único con ₡5,000 semanales.</p>
+            <h1 class="hero-title">HABLA INGLÉS<br>CON TOTAL DOMINIO</h1>
+            <p style="font-size: 20px; opacity: 0.9;">Global Learning: El programa de 24 meses para salir bilingüe. ₡5,000 por semana.</p>
         </div>
         """, unsafe_allow_html=True)
     
-    st.write("### Estado de Apertura (Meta 60 Estudiantes)")
+    st.write("### Capacidad de Apertura 2026")
     col1, col2 = st.columns([3, 1])
     col1.progress(65)
-    col2.write("40/60 Cupos")
+    col2.write("40/60 Estudiantes")
     
     st.write("---")
     c1, c2, c3 = st.columns(3)
     c1.info("🏦 **Banca:** ₡5,000 semanales")
-    c2.info("🏭 **Médica:** Alta Tecnología")
-    c3.info("⚖️ **Legal:** Asistencia y Excelencia")
+    c2.info("🌍 **Inglés:** Global Mastery (24m)")
+    c3.info("⚖️ **Legal:** Preparación Excelencia")
 
 elif nav == "📚 Oferta Académica":
-    st.header("Programas Disponibles")
-    sel = st.selectbox("Seleccione el técnico de su interés:", list(OFFER_ACADEMICA.keys()))
+    st.header("Programas CETEP")
+    sel = st.selectbox("Seleccione el técnico o curso:", list(OFFER_ACADEMICA.keys()))
     info = OFFER_ACADEMICA[sel]
-    st.subheader(f"⏱️ Duración: {info['D']} | 💰 {info['Inv']}")
+    st.subheader(f"⏱️ {info['D']} | 💰 {info['Inv']}")
     
     for bloque, temas in info['Malla'].items():
         st.markdown(f"<div class='bloque-header'>{bloque}</div>", unsafe_allow_html=True)
@@ -108,46 +115,44 @@ elif nav == "📚 Oferta Académica":
         st.markdown("</div>", unsafe_allow_html=True)
 
 elif nav == "📝 Matrícula":
-    st.header("Formulario de Admisión")
+    st.header("Formulario de Inscripción")
     with st.form("reg"):
         st.text_input("Nombre Completo"), st.text_input("WhatsApp")
-        st.selectbox("Carrera de Interés", list(OFFER_ACADEMICA.keys()))
-        if st.form_submit_button("RESERVAR MI CUPO"):
+        st.selectbox("Programa de Interés", list(OFFER_ACADEMICA.keys()))
+        if st.form_submit_button("SOLICITAR CUPO"):
             st.balloons()
-            st.success("¡Recibido! Nos comunicaremos con usted para formalizar el cupo.")
+            st.success("¡Excelente decisión! Nos comunicaremos con vos pronto.")
 
 elif nav == "🔐 Campus Virtual":
     if 'user_type' not in st.session_state: st.session_state.user_type = None
 
     if st.session_state.user_type is None:
-        st.header("Ingreso al Sistema")
+        st.header("Ingreso al Campus")
         u = st.text_input("Usuario")
         p = st.text_input("Contraseña", type="password")
-        if st.button("INGRESAR"):
+        if st.button("ACCEDER"):
             if u == "admin_cetep" and p == "Luis2026":
                 st.session_state.user_type = "admin"
                 st.rerun()
             elif u == "estudiante" and p == "123":
                 st.session_state.user_type = "estudiante"
                 st.rerun()
-            else: st.error("Credenciales incorrectas")
+            else: st.error("Acceso denegado")
     
     elif st.session_state.user_type == "admin":
-        st.subheader("👨‍💼 Panel Administrativo (admin_cetep)")
-        t1, t2, t3 = st.tabs(["📊 Financiero", "📝 Estudiantes", "📈 Notas"])
+        st.subheader("👨‍💼 Panel Luis (admin_cetep)")
+        t1, t2, t3 = st.tabs(["💰 Financiero", "📋 Matrícula", "📊 Notas"])
         
         with t1:
-            st.write("### Control Financiero")
-            st.metric("Total Semanal Recaudado", "₡300,000")
-            st.info("Mantenimiento de becas de ₡5,000 semanales activo.")
+            st.metric("Ingresos Proyectados", "₡1,200,000")
+            st.write("Control de pagos de ₡5,000 semanales.")
             
         with t2:
-            st.write("### Lista de Estudiantes (Matrícula Activa)")
-            data_est = {"Nombre": ["Juan Pérez", "Ana Rojas"], "Programa": ["Banca", "Médica"], "Saldo": ["Al día", "Al día"]}
-            st.dataframe(pd.DataFrame(data_est), use_container_width=True)
+            st.write("### Estudiantes Inscritos")
+            st.table(pd.DataFrame({"Estudiante": ["Juan P.", "María R."], "Curso": ["English Mastery", "Banca"]}))
 
         if st.button("Cerrar Sesión"):
             st.session_state.user_type = None
             st.rerun()
 
-st.markdown("<div class='footer'>© 2026 CETEP | Centro de Estudios Técnicos Profesionales | Costa Rica</div>", unsafe_allow_html=True)
+st.markdown("<div class='footer'>© 2026 CETEP | Costa Rica</div>", unsafe_allow_html=True)
