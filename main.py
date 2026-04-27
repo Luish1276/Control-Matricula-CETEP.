@@ -1,102 +1,108 @@
 import streamlit as st
 import pandas as pd
 
-# Configuración profesional
-st.set_page_config(page_title="CETEP - Gestión Académica", layout="wide", page_icon="🎓")
+# Configuración de página ancha y profesional
+st.set_page_config(page_title="CETEP - Centro de Estudios Técnicos", layout="wide", page_icon="🎓")
 
-# Menú lateral
+# Estilo CSS para imitar la sobriedad de IPEA
+st.markdown("""
+    <style>
+    .titulo-ipea { color: #002d5a; text-align: center; font-weight: bold; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    .stTabs [data-baseweb="tab-list"] { gap: 10px; }
+    .stTabs [data-baseweb="tab"] { background-color: #f0f2f6; border-radius: 4px; padding: 10px 20px; }
+    .stTabs [aria-selected="true"] { background-color: #004a99; color: white; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Menú de Navegación idéntico a IPEA
 with st.sidebar:
-    st.title("🛡️ CETEP")
-    opcion = st.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula en Línea", "Portal Administrativo"])
+    st.image("https://www.freeiconspng.com/uploads/graduation-cap-icon-png-1.png", width=80)
+    st.title("CETEP")
+    # Estructura de menú solicitada
+    opcion = st.radio("Navegación", [
+        "Inicio", 
+        "Técnicos", 
+        "Inglés", 
+        "Matrícula", 
+        "Información", 
+        "Campus Virtual"
+    ])
     st.markdown("---")
-    st.write("v1.6 - Control de Accesos")
+    st.caption("© 2026 CETEP Costa Rica")
 
-# --- SECCIONES PÚBLICAS (Se mantienen igual) ---
+# --- 1. INICIO ---
 if opcion == "Inicio":
-    st.title("Centro de Estudios Técnicos y Especialidades Profesionales")
-    st.image("https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
+    st.markdown("<h1 class='titulo-ipea'>Centro de Estudios Técnicos y Especialidades Profesionales</h1>", unsafe_allow_html=True)
+    st.image("https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
+    st.subheader("Líderes en Formación Técnica")
+    st.write("Brindamos herramientas prácticas para una inserción laboral exitosa. Nuestra metodología se enfoca en el 'saber hacer', garantizando profesionales competentes desde el primer día.")
 
-elif opcion == "Oferta Académica":
+# --- 2. TÉCNICOS (LOS 4 ORIGINALES) ---
+elif opcion == "Técnicos":
     st.header("Nuestros Programas Técnicos")
-    tabs = st.tabs(["⚖️ Asistente Legal", "🏦 Gestor Bancario", "📊 Contabilidad Técnica", "⚙️ Procesos Industriales"])
-    # Aquí va el contenido que ya definimos...
+    tabs = st.tabs(["⚖️ Asistente Legal", "🏦 Gestor Bancario", "📊 Contabilidad", "⚙️ Procesos Industriales"])
+    
+    with tabs[0]:
+        st.subheader("Técnico Superior en Asistente Legal")
+        st.write("Especialización en procesos judiciales, cobro judicial, prescripción y derecho notarial.")
+    with tabs[1]:
+        st.subheader("Técnico en Gestión Bancaria")
+        st.write("Formación integral en legislación financiera, SUGEF y operaciones de caja.")
+    with tabs[2]:
+        st.subheader("Técnico en Contabilidad Técnica")
+        st.write("Manejo de ciclo contable, impuestos (ATV) y planillas de la CCSS.")
+    with tabs[3]:
+        st.subheader("Especialista en Procesos Industriales")
+        st.write("Optimización de producción, control de calidad y seguridad industrial.")
 
-elif opcion == "Matrícula en Línea":
-    st.header("📝 Inscripción Oficial")
-    with st.form("form_matricula"):
+# --- 3. INGLÉS (NUEVA SECCIÓN ESTILO IPEA) ---
+elif opcion == "Inglés":
+    st.header("Programa de Idioma Inglés")
+    st.image("https://images.unsplash.com/photo-1543165796-5426273eaab3?auto=format&fit=crop&q=80&w=1200", use_container_width=True)
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("Inglés para el Éxito Profesional")
+        st.write("Nuestro programa está diseñado para que el estudiante alcance fluidez conversacional y técnica, enfocada en los negocios y la industria.")
+    with col2:
+        st.info("""
+        **Niveles:** Básico, Intermedio y Avanzado.
+        **Enfoque:** Conversacional (70%) y Técnico (30%).
+        **Certificación:** Alineada al Marco Común Europeo.
+        """)
+
+# --- 4. MATRÍCULA ---
+elif opcion == "Matrícula":
+    st.header("📝 Proceso de Matrícula")
+    with st.form("form_ipea"):
+        st.write("Ingrese sus datos para formalizar la inscripción.")
         nombre = st.text_input("Nombre Completo:")
         cedula = st.text_input("Cédula:")
-        tecnico = st.selectbox("Carrera:", ["Asistente Legal", "Gestor Bancario Bilingüe", "Contabilidad Técnica", "Especialista en Procesos Industriales"])
-        if st.form_submit_button("Confirmar Solicitud"):
-            st.success(f"✅ ¡Registro para {tecnico} recibido!")
+        opcion_curs = st.selectbox("Programa de interés:", ["Asistente Legal", "Gestor Bancario", "Contabilidad", "Procesos Industriales", "Inglés"])
+        if st.form_submit_button("Enviar Formulario"):
+            st.success("✅ Datos recibidos. Un asesor le contactará pronto.")
 
-# --- SECCIÓN: PORTAL ADMINISTRATIVO CON DOBLE NIVEL ---
-elif opcion == "Portal Administrativo":
-    st.header("🔐 Acceso Restringido")
+# --- 5. INFORMACIÓN (NOSOTROS) ---
+elif opcion == "Información":
+    st.header("Sobre Nosotros")
+    st.write("CETEP es una institución comprometida con el desarrollo profesional de Costa Rica.")
+    st.subheader("Nuestra Sede")
+    st.write("Ubicados en el corazón de Heredia, contamos con instalaciones modernas y laboratorios de alta tecnología.")
+    st.markdown("""
+    * **Visión:** Ser el referente nacional en educación técnica de ciclo corto.
+    * **Valores:** Excelencia, Ética y Práctica Profesional.
+    """)
+
+# --- 6. CAMPUS VIRTUAL (ACCESO ADMINISTRATIVO/DOCENTE) ---
+elif opcion == "Campus Virtual":
+    st.header("🔐 Acceso al Campus")
+    clave = st.text_input("Ingrese su contraseña de acceso:", type="password")
     
-    # Usamos una sola caja de texto para la clave, el sistema sabrá quién es según lo que escriban
-    clave = st.text_input("Ingrese su clave de acceso:", type="password")
-    
-    # 1. NIVEL LUIS (ADMINISTRADOR TOTAL)
-    if clave == "admin_cetep": 
-        st.success("Bienvenido, Director Luis Varela")
-        
-        menu_admin = st.selectbox("Panel de Control General:", [
-            "Resumen Financiero y Reportes", 
-            "Gestión de Matrícula Global",
-            "Configuración de Profesores"
-        ])
-        
-        if menu_admin == "Resumen Financiero y Reportes":
-            st.subheader("📊 Reporte de Ingresos y Proyecciones")
-            col1, col2 = st.columns(2)
-            col1.metric("Ingresos Mes Actual", "₡1,250,000", "+5%")
-            col2.metric("Matrículas Pendientes", "8 Estudiantes")
-            
-            st.write("### Gráfico de Crecimiento por Técnico")
-            datos_finanzas = pd.DataFrame({
-                "Técnico": ["Asistente Legal", "Bancario", "Contabilidad", "Industrial"],
-                "Ingresos": [450000, 300000, 250000, 250000]
-            })
-            st.bar_chart(datos_finanzas.set_index("Técnico"))
-
-        elif menu_admin == "Gestión de Matrícula Global":
-            st.subheader("Lista Maestra de Estudiantes")
-            # Aquí verías a TODOS los alumnos de todos los técnicos
-            df_total = pd.DataFrame({
-                "Estudiante": ["Juan Pérez", "Ana Mora", "Luis Brenes"],
-                "Técnico": ["Asistente Legal", "Gestor Bancario", "Contabilidad"],
-                "Pago": ["Al día", "Pendiente", "Al día"]
-            })
-            st.table(df_total)
-
-    # 2. NIVEL PROFESOR (SOLO ACADÉMICO)
+    if clave == "admin_cetep":
+        st.success("Acceso como Director Luis Varela")
+        st.selectbox("Gestión:", ["Reportes Financieros", "Control de Matrícula", "Configuración"])
     elif clave == "profe_cetep":
-        st.success("Bienvenido al Portal Docente")
-        
-        # El profesor NO VE las finanzas. Solo ve estas opciones:
-        menu_profe = st.selectbox("Funciones Docentes:", [
-            "Mis Listas de Clase", 
-            "Registro de Calificaciones",
-            "Control de Asistencia"
-        ])
-        
-        if menu_profe == "Mis Listas de Clase":
-            st.subheader("Estudiantes Asignados")
-            # El profe solo ve nombres y cédulas, nada de pagos ni dinero
-            df_profe = pd.DataFrame({
-                "Estudiante": ["Juan Pérez", "María Castro"],
-                "Cédula": ["1-1111-1111", "2-2222-2222"],
-                "Curso": ["Asistente Legal", "Asistente Legal"]
-            })
-            st.dataframe(df_profe, use_container_width=True)
-            
-        elif menu_profe == "Registro de Calificaciones":
-            st.subheader("Ingreso de Notas")
-            with st.expander("Módulo: Cobro Judicial"):
-                st.number_input("Nota Juan Pérez:", 0, 100)
-                st.number_input("Nota María Castro:", 0, 100)
-                st.button("Guardar Notas del Módulo")
-    
+        st.success("Acceso como Cuerpo Docente")
+        st.selectbox("Gestión:", ["Listas de Asistencia", "Registro de Notas"])
     elif clave != "":
-        st.error("Clave no reconocida. Verifique sus credenciales.")
+        st.error("Credenciales incorrectas")
