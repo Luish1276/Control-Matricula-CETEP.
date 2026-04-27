@@ -14,7 +14,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS ACADÉMICA COMPLETA (RESTAURADA Y CORREGIDA)
+# 2. BASE DE DATOS ACADÉMICA (RESTABLECIDA CON NOMBRES ORIGINALES)
 OFFER_ACADEMICA = {
     "Técnico en Operaciones Bancarias y Gestión de Efectivo": {
         "D": "6 Meses (Virtual)",
@@ -43,7 +43,7 @@ OFFER_ACADEMICA = {
             "Módulo C": ["Sostenibilidad", "Liderazgo", "Proyecto Integrador"]
         }
     },
-    "Técnico en Contabilidad": { # RESTAURADO
+    "Técnico en Contabilidad": {
         "D": "1 Año (Virtual)",
         "Inversion": "Consultar Plan",
         "Plan": {
@@ -52,13 +52,13 @@ OFFER_ACADEMICA = {
             "Bloque III": ["Auditoría", "Análisis Financiero", "Ética Profesional"]
         }
     },
-    "Inglés para Profesionales": { # RESTAURADO (El que faltaba)
+    "Inglés como Segunda Lengua": { # NOMBRE RESTAURADO SEGÚN TU SOLICITUD
         "D": "12 Meses (Virtual)",
         "Inversion": "Consultar Plan",
         "Plan": {
-            "Niveles Iniciales": ["Fonética y Pronunciación", "Gramática Esencial", "Inglés de Oficina"],
-            "Niveles Medios": ["Business English", "Redacción Técnica", "Comunicación para Negocios"],
-            "Niveles Superiores": ["Inglés Legal", "Negociación Internacional", "Certificación B2"]
+            "Niveles Iniciales": ["Fonética y Pronunciación", "Gramática Esencial", "Vocabulario Cotidiano"],
+            "Niveles Medios": ["Comprensión de Lectura", "Redacción Básica", "Conversación Fluida"],
+            "Niveles Superiores": ["Inglés Técnico", "Preparación para Entrevistas", "Certificación Final"]
         }
     },
     "Prep. Colegio de Abogados": {
@@ -79,7 +79,7 @@ if 'alumnos_db' not in st.session_state:
 # 4. NAVEGACIÓN
 with st.sidebar:
     st.title("🛡️ Sistema CETEP")
-    nav = st.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula", "Campus Virtual"])
+    nav = st.sidebar.radio("Menú Principal", ["Inicio", "Oferta Académica", "Matrícula", "Campus Virtual"])
     st.write("---")
     st.write("**Sede Central:** San José, Costa Rica")
     st.write("**Modalidad:** Virtual Nacional")
