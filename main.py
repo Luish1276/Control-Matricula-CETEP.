@@ -1,110 +1,175 @@
 import streamlit as st
 import pandas as pd
 
-# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (CETEP 2026)
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL DE ALTO NIVEL
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 st.markdown("""
     <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
     * { font-family: 'Poppins', sans-serif; }
-    .main-header { background-color: #002d5a; color: white; padding: 2rem; border-radius: 10px; text-align: center; margin-bottom: 2rem; }
-    .metric-card { background-color: #f8f9fa; border-left: 5px solid #ffcc00; padding: 1.5rem; border-radius: 5px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-    .bloque-header { background: #002d5a; color: #ffcc00; padding: 10px 15px; border-radius: 8px 8px 0 0; font-weight: 700; margin-top: 15px; }
-    .temario-box { background: #fdfdfd; padding: 15px; border: 1px solid #eee; border-radius: 0 0 8px 8px; margin-bottom: 10px; }
+
+    .hero-full {
+        background: linear-gradient(rgba(0,30,60,0.8), rgba(0,30,60,0.95)), 
+                    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1920');
+        background-size: cover; background-position: center; padding: 100px 20px; color: white; text-align: center;
+        border-radius: 0px 0px 50px 50px; margin: -60px -20px 40px -20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    }
+    
+    .hero-title { font-size: 50px; font-weight: 800; line-height: 1.1; margin-bottom: 10px; }
+    .price-badge {
+        background: #ffcc00; color: #002d5a; padding: 15px 30px;
+        border-radius: 15px; font-weight: 800; font-size: 28px; display: inline-block;
+        margin: 20px 0; border: 2px solid #fff;
+    }
+
+    .bloque-header {
+        background: #002d5a; color: #ffcc00; padding: 12px 20px;
+        border-radius: 10px 10px 0 0; font-weight: 700; margin-top: 20px;
+    }
+    .temario-box {
+        background: #fdfdfd; padding: 20px; border: 1px solid #eee;
+        border-radius: 0 0 10px 10px; margin-bottom: 10px;
+    }
+    .tema-line { padding: 8px 0; border-bottom: 1px solid #eef0f2; font-size: 15px; color: #333; }
+    .footer { text-align: center; padding: 40px; color: #888; border-top: 1px solid #eee; margin-top: 50px; }
+    
+    .metric-card {
+        background: #f8f9fa; border-top: 4px solid #002d5a; padding: 20px;
+        border-radius: 10px; text-align: center; box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. DATA ACADÉMICA EXTENDIDA (LA CARNITA)
+# 2. DATA ACADÉMICA RESTAURADA (NOMBRES CORRECTOS Y TEMARIO EXTENDIDO)
 OFFER_ACADEMICA = {
     "Global Learning: English Mastery (24 Meses)": {
         "D": "24 Meses (Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
         "Malla": {
-            "AÑO 1: Cimentación": ["Fonética y Sonidos", "Estructuras Gramaticales", "Fluidez Inicial"],
-            "AÑO 2: Perfeccionamiento": ["Business English", "Negociación Bilingüe", "Dominio C1"]
+            "Año 1: Nivel I - Cimentación": ["Fonética Correcta", "Gramática en Uso", "Listening de Contextos Diarios", "Conversación Inicial"],
+            "Año 2: Nivel II - Perfeccionamiento": ["Business English Corporativo", "Negociación de Alto Nivel", "Inglés Técnico Sectorial", "Dominio Nativo C1"]
         }
     },
-    "Técnico en Operaciones Bancarias": {
+    "Técnico en Operaciones Bancarias (Gestor Bancario)": {
         "D": "6 Meses (Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
         "Malla": {
-            "Módulos": ["Legislación Bancaria CR", "Ley 8204 (Lavado)", "Detección de Billetaje", "Arqueos de Caja"]
+            "MÓDULO I: Marco Legal": ["Legislación Bancaria CR", "Ley 8204: Prevención de Lavado", "Ética y Deontología Bancaria"],
+            "MÓDULO II: Operativa": ["Detección de Billetaje Falso (Dólar, Euro, Colones)", "Arqueos y Cuadres de Caja", "Seguridad Bancaria"],
+            "Global Learning": ["Inglés Técnico Bancario Integrado"]
         }
     },
     "Asistente Contable y Gestión Administrativa": {
         "D": "9 Meses (Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
         "Malla": {
-            "Contabilidad": ["Ciclo Contable", "IVA y Renta CR", "Conciliaciones"],
-            "Gestión": ["Planillas CCSS/INS", "Facturación ATV/TICA", "Excel Financiero"]
+            "Contabilidad": ["Ciclo Contable Completo", "IVA y Renta en Costa Rica", "Conciliaciones Bancarias"],
+            "Gestión": ["Planillas CCSS e INS", "Facturación Electrónica (ATV/TICA)", "Excel Financiero Avanzado"],
+            "Global Learning": ["Inglés para Negocios Integrado"]
         }
     },
-    "Gestión de Industria Médica": {
+    "Gestión de Operaciones e Industria Médica": {
         "D": "9 Meses (Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
         "Malla": {
-            "Módulos": ["ISO 13485:2016", "Cuarto Limpio", "Metrología", "Lectura de Planos"]
+            "Calidad": ["Normativa ISO 13485:2016", "GDP: Buenas Prácticas de Documentación", "Validación de Procesos"],
+            "Manufactura": ["Protocolos de Cuarto Limpio (Gowning)", "Metrología (Vernier, Micrómetro)", "Lectura de Planos"],
+            "Global Learning": ["Inglés para Manufactura Médica Integrado"]
+        }
+    },
+    "Preparación Examen Excelencia Académica (Abogados)": {
+        "D": "Curso Intensivo Virtual", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "Áreas Jurídicas": ["Derecho Civil y Mercantil", "Derecho Público y Laboral", "Derecho Notarial", "Deontología"],
+            "Simulacros": ["Análisis de Votos Sala IV", "Práctica de Exámenes de Excelencia Real"]
         }
     }
 }
 
-# 3. BASE DE DATOS INTERNA PARA EL DIRECTOR
+# 3. BASE DE DATOS PARA DIRECCIÓN
 if 'db_estudiantes' not in st.session_state:
     st.session_state.db_estudiantes = pd.DataFrame([
-        {"Nombre": "Carlos Varela", "Carrera": "Banca", "Nota": 92, "Pago": "Al día"},
-        {"Nombre": "Ana Jackson", "Carrera": "Industria Médica", "Nota": 88, "Pago": "Al día"},
-        {"Nombre": "Luis G. Vargas", "Carrera": "Contabilidad", "Nota": 95, "Pago": "Pendiente"}
+        {"Nombre": "Carlos Varela", "Carrera": "Gestor Bancario", "Nota": 92, "Mensualidad": "Pagado"},
+        {"Nombre": "Ana Jackson", "Carrera": "Industria Médica", "Nota": 88, "Mensualidad": "Pagado"},
+        {"Nombre": "Luis Vargas", "Carrera": "Contabilidad", "Nota": 95, "Mensualidad": "Pendiente"}
     ])
 
-# 4. SISTEMA DE NAVEGACIÓN
-if 'autenticado' not in st.session_state: st.session_state.autenticado = False
+# 4. NAVEGACIÓN
+with st.sidebar:
+    st.markdown("<h2 style='text-align:center; color:#002d5a;'>CETEP</h2>", unsafe_allow_html=True)
+    st.write("---")
+    nav = st.radio("NAVEGACIÓN PRINCIPAL", ["🏠 Inicio", "📚 Oferta Académica", "📝 Matrícula", "🔐 Campus Virtual"])
 
-menu = st.sidebar.radio("MENÚ", ["🏠 Inicio", "📚 Oferta Académica", "🔐 Campus Virtual (Director)"])
+if nav == "🏠 Inicio":
+    st.markdown("""
+        <div class="hero-full">
+            <h1 class="hero-title">FORMACIÓN TÉCNICA<br>DE ALTO NIVEL</h1>
+            <p style="font-size: 20px; opacity: 0.9;">Excelencia Académica y Global Learning (Inglés).</p>
+            <div class="price-badge">₡15,000 AL MES</div>
+            <p>Matrícula ₡5,000 (Única vez) | 100% Virtual Autodirigido</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    c1, c2, c3 = st.columns(3)
+    c1.info("🌍 **Bilingüismo:** 24 meses de inglés incluidos.")
+    c2.info("⚖️ **Garantía:** Respaldo de profesionales activos.")
+    c3.info("🛡️ **Seguridad:** Certificación bajo estándares legales.")
 
-if menu == "🏠 Inicio":
-    st.markdown("<div class='main-header'><h1>CETEP 2026</h1><p>Excelencia Técnica al alcance de todos</p></div>", unsafe_allow_html=True)
-    st.markdown("<center><div style='font-size:30px; font-weight:800; color:#002d5a;'>MENSUALIDAD: ₡15,000</div></center>", unsafe_allow_html=True)
-    st.info("🎯 **Meta Institucional:** 500 Estudiantes activos.")
-
-elif menu == "📚 Oferta Académica":
-    st.header("Programas Técnicos Profesionales")
-    sel = st.selectbox("Seleccione una carrera:", list(OFFER_ACADEMICA.keys()))
+elif nav == "📚 Oferta Académica":
+    st.header("Detalle de Programas 2026")
+    sel = st.selectbox("Seleccione una carrera para ver el temario extendido:", list(OFFER_ACADEMICA.keys()))
     info = OFFER_ACADEMICA[sel]
-    st.subheader(f"⏱️ {info['D']} | 💰 {info['Inv']}")
+    st.subheader(f"⏱️ Duración: {info['D']} | 💰 {info['Inv']}")
     for bloque, temas in info['Malla'].items():
         st.markdown(f"<div class='bloque-header'>{bloque}</div>", unsafe_allow_html=True)
-        with st.container():
-            for t in temas: st.write(f"✅ {t}")
+        st.markdown("<div class='temario-box'>", unsafe_allow_html=True)
+        for t in temas: st.markdown(f"<div class='tema-line'>🔹 {t}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
-elif menu == "🔐 Campus Virtual (Director)":
-    if not st.session_state.autenticado:
-        st.subheader("Acceso Administrativo")
+elif nav == "📝 Matrícula":
+    st.header("Reserva de Cupo")
+    with st.form("mat"):
+        st.text_input("Nombre Completo"), st.text_input("Cédula"), st.text_input("WhatsApp")
+        st.selectbox("Programa de Interés", list(OFFER_ACADEMICA.keys()))
+        if st.form_submit_button("RESERVAR MI LUGAR"):
+            st.success("¡Datos enviados! Pronto recibirás el link de pago de matrícula.")
+
+elif nav == "🔐 Campus Virtual":
+    if 'auth' not in st.session_state: st.session_state.auth = False
+    
+    if not st.session_state.auth:
+        st.subheader("Acceso al Sistema")
         u = st.text_input("Usuario")
         p = st.text_input("Contraseña", type="password")
-        if st.button("Ingresar"):
+        if st.button("INGRESAR"):
             if u == "admin_cetep" and p == "Luis2026":
-                st.session_state.autenticado = True
+                st.session_state.auth = True
                 st.rerun()
             else: st.error("Acceso denegado")
     else:
-        # VISTA DEL DIRECTOR LUIS
-        st.markdown("<div class='main-header'><h1>Panel de Control del Director</h1></div>", unsafe_allow_html=True)
-        
-        # MÉTRICAS
-        cant = len(st.session_state.db_estudiantes)
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Matrícula Total", cant)
-        c2.metric("Ganancia Mensual (₡15k/u)", f"₡{cant * 15000:,.0f}")
-        c3.metric("Recaudación Matrícula", f"₡{cant * 5000:,.0f}")
-        
-        tab1, tab2, tab3 = st.tabs(["📊 Notas", "📋 Estudiantes", "🎥 Videos"])
-        with tab1:
-            st.write("### Revisión de Notas")
-            st.dataframe(st.session_state.db_estudiantes[["Nombre", "Carrera", "Nota"]], use_container_width=True)
-        with tab2:
-            st.write("### Control de Pagos y Matrícula")
-            st.table(st.session_state.db_estudiantes)
-        with tab3:
-            st.subheader("Planteamiento de Clases Autodirigidas")
-            st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ") # Ejemplo de video
-            
+        # VISTA DEL DIRECTOR LUIS HUMBERTO
+        st.subheader("👨‍💼 PANEL DE DIRECCIÓN (admin_cetep)")
         if st.sidebar.button("Cerrar Sesión"):
-            st.session_state.autenticado = False
+            st.session_state.auth = False
             st.rerun()
+            
+        t1, t2, t3 = st.tabs(["📊 Control de Carrera (Notas)", "💰 Matrícula y Ganancias", "🎥 Video-Lecciones"])
+        
+        with t1:
+            st.write("### Revisión de Notas y Rendimiento Académico")
+            st.dataframe(st.session_state.db_estudiantes[["Nombre", "Carrera", "Nota"]], use_container_width=True)
+        
+        with t2:
+            cant = len(st.session_state.db_estudiantes)
+            c1, c2 = st.columns(2)
+            with c1:
+                st.markdown(f"<div class='metric-card'><h4>Matrícula Actual</h4><h2>{cant} Alumnos</h2></div>", unsafe_allow_html=True)
+            with c2:
+                st.markdown(f"<div class='metric-card'><h4>Ganancia Mensual</h4><h2>₡{cant*15000:,.0f}</h2></div>", unsafe_allow_html=True)
+            st.write("---")
+            st.write("### Detalle de Pagos")
+            st.table(st.session_state.db_estudiantes)
+
+        with t3:
+            st.subheader("Control de Material Multimedia")
+            st.info("Vista previa de las lecciones grabadas para los estudiantes.")
+            st.video("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
+st.markdown("<div class='footer'>© 2026 CETEP | Costa Rica</div>", unsafe_allow_html=True)
