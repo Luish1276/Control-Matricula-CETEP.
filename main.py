@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 
-# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (CETEP)
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (ELEGANTE)
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 st.markdown("""
@@ -10,118 +10,112 @@ st.markdown("""
     * { font-family: 'Poppins', sans-serif; }
     .hero-full {
         background: linear-gradient(rgba(0,30,60,0.85), rgba(0,30,60,0.95)), 
-                    url('https://images.unsplash.com/photo-1501504905252-473c47e087f8?auto=format&fit=crop&q=80&w=1920');
+                    url('https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80&w=1920');
         background-size: cover; background-position: center; padding: 100px 20px; color: white; text-align: center;
         border-radius: 0px 0px 50px 50px; margin: -60px -20px 40px -20px; box-shadow: 0 15px 35px rgba(0,0,0,0.3);
     }
-    .metric-card {
-        background: #ffffff; border-left: 5px solid #002d5a; padding: 20px;
-        border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;
-    }
-    .price-badge {
-        background: #ffcc00; color: #002d5a; padding: 10px 25px;
-        border-radius: 10px; font-weight: 800; font-size: 24px; display: inline-block; margin: 15px 0;
-    }
-    .footer { text-align: center; padding: 30px; color: #888; border-top: 1px solid #eee; margin-top: 40px; }
+    .price-badge { background: #ffcc00; color: #002d5a; padding: 15px 30px; border-radius: 15px; font-weight: 800; font-size: 28px; display: inline-block; margin: 20px 0; border: 2px solid #fff; }
+    .bloque-header { background: #002d5a; color: #ffcc00; padding: 12px 20px; border-radius: 10px 10px 0 0; font-weight: 700; margin-top: 20px; }
+    .temario-box { background: #fdfdfd; padding: 20px; border: 1px solid #eee; border-radius: 0 0 10px 10px; margin-bottom: 10px; }
+    .tema-line { padding: 8px 0; border-bottom: 1px solid #eef0f2; font-size: 15px; color: #333; }
+    .metric-card { background: #ffffff; border-top: 5px solid #002d5a; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
-# 2. BASE DE DATOS DE CONTROL (DIRECCIÓN)
-# Simulamos una base de datos para que el panel no aparezca vacío
-if 'db_estudiantes' not in st.session_state:
-    st.session_state.db_estudiantes = pd.DataFrame([
-        {"Nombre": "Carlos Varela", "Curso": "Gestor Bancario", "Nota": 92, "Matrícula": "Paga", "Mensualidad": "Paga"},
-        {"Nombre": "Ana Jackson", "Curso": "Industria Médica", "Nota": 88, "Matrícula": "Paga", "Mensualidad": "Paga"},
-        {"Nombre": "Luis G. Vargas", "Curso": "Asistente Contable", "Nota": 95, "Matrícula": "Paga", "Mensualidad": "Pendiente"},
-        {"Nombre": "María Carranza", "Curso": "English Mastery", "Nota": 85, "Matrícula": "Paga", "Mensualidad": "Paga"}
-    ])
-
-# 3. CONTENIDO DE LECCIONES (MODALIDAD VIRTUAL)
-CURSOS_VIDEOS = {
-    "Gestor Bancario": [
-        {"modulo": "Módulo 1: Ley 8204 y Marco Legal", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"},
-        {"modulo": "Módulo 2: Detección de Billetaje", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-    ],
-    "Industria Médica": [
-        {"modulo": "Módulo 1: ISO 13485 e Industria", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-    ],
-    "Asistente Contable": [
-        {"modulo": "Módulo 1: Ciclo Contable y Tributación", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}
-    ]
+# 2. DATA ACADÉMICA (RESTAURADA TOTALMENTE)
+OFFER_ACADEMICA = {
+    "Global Learning: English Mastery (24 Meses)": {
+        "D": "24 Meses (Virtual Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "Año 1: Cimentación": ["Fonética Correcta", "Gramática en Uso", "Conversación Inicial"],
+            "Año 2: Perfeccionamiento": ["Business English", "Negociación", "Dominio C1"]
+        }
+    },
+    "Técnico en Operaciones Bancarias (Gestor Bancario)": {
+        "D": "6 Meses (Virtual Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "MÓDULO I: Marco Legal": ["Legislación Bancaria CR", "Ley 8204: Prevención de Lavado", "Ética Bancaria"],
+            "MÓDULO II: Operativa": ["Detección de Billetaje Falso", "Arqueos y Cuadres de Caja", "Seguridad Bancaria"],
+            "Global Learning": ["Inglés Técnico Bancario Integrado"]
+        }
+    },
+    "Asistente Contable y Gestión Administrativa": {
+        "D": "9 Meses (Virtual Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "Contabilidad": ["Ciclo Contable Completo", "IVA y Renta Costa Rica", "Conciliaciones"],
+            "Gestión": ["Planillas CCSS e INS", "Facturación Electrónica (ATV/TICA)", "Excel Financiero"],
+            "Global Learning": ["Inglés para Negocios Integrado"]
+        }
+    },
+    "Gestión de Operaciones e Industria Médica": {
+        "D": "9 Meses (Virtual Autodirigido)", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "Calidad": ["ISO 13485:2016", "GDP: Buenas Prácticas de Documentación", "Validación QMS"],
+            "Manufactura": ["Protocolos Cuarto Limpio (Gowning)", "Metrología (Vernier/Micrómetro)", "Lectura de Planos"],
+            "Global Learning": ["Inglés Industrial Médico Integrado"]
+        }
+    },
+    "Preparación Examen Excelencia Académica (Abogados)": {
+        "D": "Intensivo Virtual", "Inv": "Matrícula ₡5,000 / Mensual ₡15,000",
+        "Malla": {
+            "Áreas": ["Civil/Mercantil", "Público/Laboral", "Notarial/Deontología"],
+            "Práctica": ["Análisis Votos Sala IV", "Simulacros de Examen Real"]
+        }
+    }
 }
 
-# 4. NAVEGACIÓN
+# 3. VIDEOS PARA MODALIDAD VIRTUAL
+CURSOS_VIDEOS = {
+    "Gestor Bancario": [{"modulo": "Módulo 1: Ley 8204", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}],
+    "Asistente Contable": [{"modulo": "Módulo 1: IVA y Renta", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}],
+    "Industria Médica": [{"modulo": "Módulo 1: ISO 13485", "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ"}]
+}
+
+# 4. BASE DE DATOS DE DIRECCIÓN
+if 'db_estudiantes' not in st.session_state:
+    st.session_state.db_estudiantes = pd.DataFrame([
+        {"Nombre": "Carlos Varela", "Curso": "Gestor Bancario", "Nota": 92, "Mensualidad": "Pagado"},
+        {"Nombre": "Ana Jackson", "Curso": "Industria Médica", "Nota": 88, "Mensualidad": "Pagado"},
+        {"Nombre": "Luis Vargas", "Curso": "Asistente Contable", "Nota": 95, "Mensualidad": "Pendiente"}
+    ])
+
+# 5. NAVEGACIÓN
 with st.sidebar:
     st.markdown("## CETEP 2026")
-    nav = st.radio("IR A:", ["🏠 Inicio", "📚 Carreras", "💻 Campus Estudiante", "🔐 Panel de Dirección"])
+    nav = st.radio("MENÚ", ["🏠 Inicio", "📚 Carreras", "💻 Campus Estudiante", "🔐 Panel Director"])
 
-# 5. LÓGICA DE PÁGINAS
 if nav == "🏠 Inicio":
-    st.markdown("""
-        <div class="hero-full">
-            <h1>CENTRO DE ESTUDIOS TÉCNICOS</h1>
-            <p>Excelencia Académica | Modalidad 100% Virtual Autodirigida</p>
-            <div class="price-badge">Mensualidad: ₡15,000</div>
-            <p>Matrícula Única: ₡5,000</p>
-        </div>
-        """, unsafe_allow_html=True)
+    st.markdown("""<div class="hero-full"><h1>FORMACIÓN TÉCNICA PROFESIONAL</h1><p>Modalidad 100% Virtual Autodirigida</p><div class="price-badge">₡15,000 MENSUALES</div><p>Matrícula Única: ₡5,000</p></div>""", unsafe_allow_html=True)
 
 elif nav == "📚 Carreras":
-    st.header("Nuestra Oferta Académica")
-    st.write("Técnicos diseñados para la inserción laboral inmediata.")
-    # Aquí irían los temarios detallados que ya tenemos definidos
+    sel = st.selectbox("Seleccione un programa:", list(OFFER_ACADEMICA.keys()))
+    info = OFFER_ACADEMICA[sel]
+    st.subheader(f"⏱️ {info['D']} | 💰 {info['Inv']}")
+    for bloque, temas in info['Malla'].items():
+        st.markdown(f"<div class='bloque-header'>{bloque}</div><div class='temario-box'>", unsafe_allow_html=True)
+        for t in temas: st.markdown(f"<div class='tema-line'>✅ {t}</div>", unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
 
 elif nav == "💻 Campus Estudiante":
     st.header("🎥 Mis Lecciones Virtuales")
     c_sel = st.selectbox("Curso:", list(CURSOS_VIDEOS.keys()))
     l_sel = st.selectbox("Módulo:", [l["modulo"] for l in CURSOS_VIDEOS[c_sel]])
-    video_url = next(item for item in CURSOS_VIDEOS[c_sel] if item["modulo"] == l_sel)["url"]
-    
-    st.video(video_url)
-    st.button("Marcar como completado")
+    st.video(next(item for item in CURSOS_VIDEOS[c_sel] if item["modulo"] == l_sel)["url"])
 
-elif nav == "🔐 Panel de Dirección":
+elif nav == "🔐 Panel Director":
     if 'auth' not in st.session_state: st.session_state.auth = False
-    
     if not st.session_state.auth:
-        st.subheader("Acceso Restringido")
-        u = st.text_input("Usuario Director")
-        p = st.text_input("Contraseña", type="password")
+        u, p = st.text_input("Usuario"), st.text_input("Clave", type="password")
         if st.button("Ingresar"):
-            if u == "admin_cetep" and p == "Luis2026":
-                st.session_state.auth = True
-                st.rerun()
-            else: st.error("Credenciales Inválidas")
+            if u == "admin_cetep" and p == "Luis2026": st.session_state.auth = True; st.rerun()
     else:
-        st.markdown("## 👨‍💼 Panel de Control de Dirección")
-        if st.sidebar.button("Cerrar Sesión"):
-            st.session_state.auth = False
-            st.rerun()
+        st.subheader("👨‍💼 Panel del Director Luis Humberto")
+        cant = len(st.session_state.db_estudiantes)
+        c1, c2 = st.columns(2)
+        c1.markdown(f"<div class='metric-card'><h4>Matrículas (₡5k)</h4><h2>₡{cant*5000:,.0f}</h2></div>", unsafe_allow_html=True)
+        c2.markdown(f"<div class='metric-card'><h4>Mensualidades (₡15k)</h4><h2>₡{cant*15000:,.0f}</h2></div>", unsafe_allow_html=True)
+        st.write("### Control Académico")
+        st.table(st.session_state.db_estudiantes)
+        if st.sidebar.button("Cerrar Sesión"): st.session_state.auth = False; st.rerun()
 
-        # MÉTRICAS FINANCIERAS REALES
-        total_alumnos = len(st.session_state.db_estudiantes)
-        ingresos_mensuales = total_alumnos * 15000
-        ingresos_matricula = total_alumnos * 5000
-
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            st.markdown(f"<div class='metric-card'><h3>Alumnos</h3><h2>{total_alumnos}</h2></div>", unsafe_allow_html=True)
-        with col2:
-            st.markdown(f"<div class='metric-card'><h3>Mensualidades</h3><h2>₡{ingresos_mensuales:,.0f}</h2></div>", unsafe_allow_html=True)
-        with col3:
-            st.markdown(f"<div class='metric-card'><h3>Matrículas</h3><h2>₡{ingresos_matricula:,.0f}</h2></div>", unsafe_allow_html=True)
-
-        st.write("---")
-        
-        tab1, tab2 = st.tabs(["📝 Revisión Académica (Notas)", "🎥 Supervisión de Módulos"])
-        
-        with tab1:
-            st.subheader("Control de Notas por Estudiante")
-            st.dataframe(st.session_state.db_estudiantes, use_container_width=True)
-        
-        with tab2:
-            st.subheader("Estado de Lecciones Virtuales")
-            st.write("Actualmente hay lecciones cargadas para 3 carreras técnicas.")
-            st.info("Recordá que podés subir nuevos videos actualizando el diccionario CURSOS_VIDEOS en el código.")
-
-st.markdown("<div class='footer'>© 2026 CETEP | Gestión Luis Humberto V.</div>", unsafe_allow_html=True)
+st.markdown("<center style='color:#888; margin-top:50px;'>© 2026 CETEP | Costa Rica</center>", unsafe_allow_html=True)
