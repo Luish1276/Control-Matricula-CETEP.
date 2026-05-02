@@ -1,6 +1,8 @@
 import streamlit as st
+import pandas as pd
 
-if u == st.secrets["ADMIN_USER"] and p == st.secrets["ADMIN_PASSWORD"]:
+# 1. CONFIGURACIÓN E IDENTIDAD VISUAL (ELEGANTE)
+st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
 
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL (ELEGANTE)
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
@@ -108,7 +110,9 @@ elif nav == "🔐 Panel Director":
     if not st.session_state.auth:
         u, p = st.text_input("Usuario"), st.text_input("Clave", type="password")
         if st.button("Ingresar"):
-            if u == "admin_cetep" and p == "Luis2026": st.session_state.auth = True; st.rerun()
+            if u == st.secrets["ADMIN_USER"] and p == st.secrets["ADMIN_PASSWORD"]:
+    st.session_state.auth = True
+    st.rerun()
     else:
         st.subheader("👨‍💼 Panel del Director Luis Humberto")
         cant = len(st.session_state.db_estudiantes)
