@@ -1,5 +1,6 @@
 import streamlit as st
-import pandas as pd
+
+if u == st.secrets["ADMIN_USER"] and p == st.secrets["ADMIN_PASSWORD"]:
 
 # 1. CONFIGURACIÓN E IDENTIDAD VISUAL (ELEGANTE)
 st.set_page_config(page_title="CETEP | Campus Virtual", layout="wide", page_icon="🎓")
