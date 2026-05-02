@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
+from urllib.parse import quote
 
 # =========================
 # CONFIGURACIÓN GENERAL
@@ -17,6 +18,9 @@ ARCHIVO_ESTUDIANTES = "estudiantes.csv"
 
 ADMIN_USER = "admin_cetep"
 ADMIN_PASSWORD = "Luis2026"
+
+SINPE_MOVIL = "8630-2333"
+WHATSAPP = "50686302333"
 
 # =========================
 # ESTILOS
@@ -62,6 +66,15 @@ st.markdown("""
     box-shadow: 0 6px 16px rgba(0,0,0,0.10);
     margin-bottom: 20px;
     border-left: 8px solid #002d5a;
+}
+
+.payment-card {
+    background: #fff9df;
+    padding: 25px;
+    border-radius: 18px;
+    border-left: 8px solid #ffcc00;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+    margin-top: 20px;
 }
 
 .bloque-header {
@@ -272,6 +285,14 @@ def guardar_estudiante(nombre, cedula, telefono, correo, curso):
 def formato_colones(monto):
     return f"₡{monto:,.0f}".replace(",", ".")
 
+def crear_link_whatsapp(nombre, curso):
+    mensaje = (
+        f"Hola, soy {nombre}. "
+        f"Acabo de completar la matrícula en CETEP para el curso: {curso}. "
+        f"Deseo enviar el comprobante de pago y finalizar el proceso."
+    )
+    return f"https://wa.me/{WHATSAPP}?text={quote(mensaje)}"
+
 # =========================
 # MENÚ LATERAL
 # =========================
@@ -391,7 +412,25 @@ elif nav == "📝 Matrícula":
                 st.warning("Debe aceptar ser contactado para continuar.")
             else:
                 guardar_estudiante(nombre, cedula, telefono, correo, curso)
-                st.success("✅ Matrícula registrada correctamente. CETEP podrá contactarle para finalizar el proceso.")
+
+                st.success("✅ Matrícula registrada correctamente.")
+
+                monto_matricula = OFFER_ACADEMICA[curso]["matricula"]
+                mensualidad = OFFER_ACADEMICA[curso]["mensualidad"]
+                whatsapp_link = crear_link_whatsapp(nombre, curso)
+
+                st.markdown(f"""
+                <div class="payment-card">
+                    <h3>💳 Paso siguiente: formalizar el pago</h3>
+                    <p>Para finalizar la matrícula, realice el pago correspondiente y envíe el comprobante por WhatsApp.</p>
+                    <p><strong>SINPE Móvil:</strong> {SINPE_MOVIL}</p>
+                    <p><strong>Monto de matrícula:</strong> {formato_colones(monto_matricula)}</p>
+                    <p><strong>Mensualidad del programa:</strong> {formato_colones(mensualidad)}</p>
+                    <p><strong>Concepto recomendado:</strong> Nombre del estudiante</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                st.link_button("📲 Enviar comprobante por WhatsApp", whatsapp_link)
 
 # =========================
 # CAMPUS ESTUDIANTE
